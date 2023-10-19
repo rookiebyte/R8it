@@ -1,0 +1,3 @@
+com.rit.starterboot.configuration.security.SecurityConfiguration
+com.rit.starterboot.configuration.swagger.SwaggerConfiguration
+com.rit.starterboot.configuration.exception.GlobalExceptionHandler

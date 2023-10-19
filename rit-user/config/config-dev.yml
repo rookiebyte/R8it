@@ -1,0 +1,25 @@
+app:
+  inMemory: false
+  cors:
+    allowedOrigins:
+      - http://localhost:8080
+  jwt:
+    keystore-path: ../jwt/keystore.jks
+    keystore-password: password
+    key-alias: oauthkey
+    private-key-passphrase: password
+    valid-period-in-hours: 24
+  pbkdf2:
+    pbkdf2-secret: long_and_secure_string
+    salt-length: 1024
+    iteration: 64
+
+spring:
+  config:
+    import: optional:secrets.yml
+
+eureka:
+  client:
+    enabled: false
+    serviceUrl:
+      defaultZone: http://localhost:8082/eureka

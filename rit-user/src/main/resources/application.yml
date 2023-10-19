@@ -1,0 +1,37 @@
+server:
+  port: 8084
+  servlet:
+    contextPath: /v1/rit/users
+
+spring:
+  application:
+    name: @project.artifactId@
+  data:
+    mongodb:
+      database: rit-user
+
+app:
+  inMemory: true
+  repositories:
+    inMemory:
+      user: ${app.inMemory}
+
+build:
+  version: @project.version@
+  description: @project.description@
+
+eureka:
+  instance:
+    statusPageUrlPath: ${server.servlet.contextPath}/actuator/info
+    healthCheckUrlPath: ${server.servlet.contextPath}/actuator/health
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info, health
+  security:
+    enabled: false
