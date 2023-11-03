@@ -1,4 +1,5 @@
 = R8itApp
 
 Many of us put our trust in Google reviews or similar apps, where random individuals rate something, leaving us to rely on the wisdom of the crowd. However, we hold a difrrent perspective, and this platform shows a better way. For us, the most valuable opinions come from the close circle. Use this app to share your valid thoughts with friends
-== 
+== MVP - minimum viable product
+"If you’re not embarrassed by the first version of your product, you’ve launched too late."
