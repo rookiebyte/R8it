@@ -31,12 +31,17 @@ Utworzenie aplikacji która pojawi się w sklepach google pay/apple store jest p
 in this sections most common use cases are described:
 
 - `After instalation I'm able to login to existing account`
+- provide email and confirm otp (if user has password set ask for it)
+
 - `After instalation I'm able to recover my account`
 - `After instalation I'm able to sign up new account`
 
 - `As a logged user I can add friend to close circle`
 - `As a logged user I can remove friend from close circle`
 - `As a logged user I can create new post containing: photo, description, location, tags`
+
+== System requirements
+- sending emails/sms/push notifications 
 - 
 
 = MVP - minimum viable product
