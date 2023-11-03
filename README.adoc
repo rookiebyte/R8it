@@ -1,5 +1,43 @@
 = R8itApp
 
 Many of us put our trust in Google reviews or similar apps, where random individuals rate something, leaving us to rely on the wisdom of the crowd. However, we hold a difrrent perspective, and this platform shows a better way. For us, the most valuable opinions come from the close circle. Use this app to share your valid thoughts with friends
-== MVP - minimum viable product
+
+== Business Goals
+
+It's hard to define how this app could make money without ads. So the main goal is to attract peapole to use app and monetize their attetion. Looking at others apps like spotify, yt or any streaming platofrm we can see that web apps are moving to paywall, subscription models etc. So I think it's essential to discuss other forms of monetizing this app, but at the beging we need to focus on the product.  
+
+=== Wide perspective
+
+Applikacja ma umożliwić łatwiejsze przekazywanie opini wewnątrz grupy. Jako użytkownik dodanie nowej opini musi być szybkie, aby ktoś chciał to zrobić. Zależy nam żeby jak najwiecej osób dodawało swoje opinie. Z drugiej strony chcemy aby ludzie cenili sobie opinie zobaczone na platformie i chcieli ją dowiedząc za każdym razem gdy będą poszukiwać kolejnego seriali, książki, restauracji, przepisu. 
+
+== Business Needs
+
+=== User motivation
+Użytkowników, możemy umieścić na skali porównującej czestotliwość dodawania postów do ich przeglądania i w ten sposób wyszczególnić ich motywacje:
+
+==== Reviewer
+osoba, głownie publikująca opinie. Motywacją jest chęc dzielenie się swoim zdaniem z innymi. Any utrzymać takiego użytkownika aplikacja musi wskazywać na to, że praca włożona w utworzenie recenzji jest doceniona przez grono odbiorców. Liczba wyświetleń, komentarze, skala pomocności(like stack overflow) lub inne. 
+
+==== Searcher 
+osoba poszukjąca nowych rzeczy. Motywacją jest chęć znalezienia czegoś noweg eksytujacego. Aby utrzymać takiego użytkownika utworzyć wrażenie, że po zamknięciu aplikacji udało mu się coś znaleźć ale prawdopodbnie jutro uda mu się znaleźć coś równie interesujacego.
+
+==== Mixed
+Na skali pomiędzy. Utrzymując 2 powyższe osoby te również powinno się udać.
+
+=== Success definitions
+Utworzenie aplikacji która pojawi się w sklepach google pay/apple store jest planem minimum, który możnaby uznać za sukces zważając na to ze jest to pierwsza aplikacja.
+
+== User Requirements
+in this sections most common use cases are described:
+
+- `After instalation I'm able to login to existing account`
+- `After instalation I'm able to recover my account`
+- `After instalation I'm able to sign up new account`
+
+- `As a logged user I can add friend to close circle`
+- `As a logged user I can remove friend from close circle`
+- `As a logged user I can create new post containing: photo, description, location, tags`
+- 
+
+= MVP - minimum viable product
 "If you’re not embarrassed by the first version of your product, you’ve launched too late."
