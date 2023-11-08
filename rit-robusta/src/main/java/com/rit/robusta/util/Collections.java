@@ -4,7 +4,6 @@ import java.util.Map;
 
 public final class Collections {
 
-
     private Collections() {
     }
 
