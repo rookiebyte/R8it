@@ -2,17 +2,13 @@ package com.rit.user.infrastructure.user;
 
 import com.rit.robusta.inmemory.InMemoryRepository;
 import com.rit.robusta.util.Strings;
-import com.rit.starterboot.domain.user.User;
+import com.rit.user.domain.user.User;
 import com.rit.user.domain.user.UserRepository;
 import com.rit.user.domain.user.UsersCredentials;
 import com.rit.user.infrastructure.user.entity.UserEntity;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
-@ConditionalOnProperty(prefix = "app.repositories.inMemory", name = "user", havingValue = "true")
 public class InMemoryUserRepository extends InMemoryRepository<String, UserEntity> implements UserRepository {
 
     public InMemoryUserRepository() {
@@ -40,8 +36,19 @@ public class InMemoryUserRepository extends InMemoryRepository<String, UserEntit
     }
 
     @Override
-    public User saveUser(User user, UsersCredentials credentials) {
-        return save(new UserEntity(user, credentials)).toDomain();
+    public User saveUser(User user) {
+        return save(new UserEntity(user)).toDomain();
+    }
+
+    @Override
+    public void updateUsersCredentials(User user, UsersCredentials credentials) {
+        var optionalEntity = findById(user.getId());
+        if (optionalEntity.isEmpty()) {
+            return;
+        }
+        var entity = optionalEntity.get();
+        entity.setPassword(credentials.password());
+        save(entity);
     }
 
     private UsersCredentials buildUserCredentials(UserEntity userEntity) {

@@ -17,8 +17,8 @@ public record JwtProperties(
         String keyAlias,
         @NotEmpty
         String privateKeyPassphrase,
-        @NotNull
-        Integer validPeriodInHours
+        EncoderProperties encoder
+
 ) {
 
     public char[] keyStorePasswordAsArray() {
@@ -27,5 +27,14 @@ public record JwtProperties(
 
     public char[] privateKeyPassphraseAsArray() {
         return privateKeyPassphrase.toCharArray();
+    }
+
+    public record EncoderProperties(
+
+            boolean enabled,
+
+            @NotNull
+            Integer validPeriodInHours
+    ) {
     }
 }

@@ -11,10 +11,10 @@ spring:
       database: rit-user
 
 app:
-  inMemory: true
-  repositories:
-    inMemory:
-      user: ${app.inMemory}
+  jwt:
+    encoder:
+      enabled: true
+      valid-period-in-hours: 24
 
 build:
   version: @project.version@

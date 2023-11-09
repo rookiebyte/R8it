@@ -14,4 +14,8 @@ public final class Collections {
     public static boolean isNotEmpty(Map<?, ?> value) {
         return !isEmpty(value);
     }
+
+    public static <K, V> MapWrapper<K, V> utilityWrapper(Map<K, V> value) {
+        return new MapWrapper<>(value);
+    }
 }

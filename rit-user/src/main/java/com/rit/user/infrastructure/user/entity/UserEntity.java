@@ -1,11 +1,14 @@
 package com.rit.user.infrastructure.user.entity;
 
 import com.google.common.base.Objects;
-import com.rit.starterboot.domain.user.User;
-import com.rit.user.domain.user.UsersCredentials;
+import com.rit.robusta.util.Collections;
+import com.rit.starterboot.domain.user.UserStatus;
+import com.rit.user.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Map;
 
 @Getter
 @Setter
@@ -14,18 +17,28 @@ public class UserEntity {
 
     private String id;
     private String email;
+    private UserStatus userStatus;
     private String username;
     private String phoneNumber;
     private byte[] password;
+    private Map<String, UserOtpEntity> oneTimePasswords;
 
-    public UserEntity(User user, UsersCredentials credentials) {
+    public UserEntity(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
-        this.password = credentials.password();
+        this.userStatus = user.getUserStatus();
+        this.oneTimePasswords = Collections.utilityWrapper(user.getOneTimePasswords()).convertValues(UserOtpEntity::new);
     }
 
     public User toDomain() {
-        return User.builder().id(id).email(email).username(username).phoneNumber(phoneNumber).build();
+        return User.builder()
+                   .id(id)
+                   .email(email)
+                   .userStatus(userStatus)
+                   .username(username)
+                   .phoneNumber(phoneNumber)
+                   .oneTimePasswords(Collections.utilityWrapper(oneTimePasswords).convertValues(UserOtpEntity::toDomain))
+                   .build();
     }
 
     @Override

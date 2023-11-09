@@ -36,7 +36,7 @@ class SecurityConfigurationSpec extends SpringFullContextSpecification {
 
     def 'get auth-needed endpoint, with barer token, expect status is ok'() {
         setup:
-        def token = jwtEncoder.encode { return "asdasd" }
+        def token = jwtEncoder.encode(new DummyJwtTemplate())
         when:
         def request = get(AUTH_NEEDED_GET)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer $token")

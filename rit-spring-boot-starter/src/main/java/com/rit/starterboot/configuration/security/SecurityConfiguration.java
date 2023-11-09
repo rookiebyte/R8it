@@ -1,19 +1,16 @@
 package com.rit.starterboot.configuration.security;
 
-import com.auth0.jwt.algorithms.Algorithm;
-import com.rit.starterboot.configuration.jwt.JwtKeyStore;
-import com.rit.starterboot.configuration.jwt.properties.JwtProperties;
-import com.rit.starterboot.configuration.security.jwt.Auth0JwtDecoder;
-import com.rit.starterboot.configuration.security.jwt.Auth0JwtEncoder;
 import com.rit.starterboot.configuration.security.jwt.BearerTokenAuthenticationEntryPoint;
 import com.rit.starterboot.configuration.security.jwt.BearerTokenAuthenticationFilter;
+import com.rit.starterboot.configuration.security.jwt.JwtConfiguration;
 import com.rit.starterboot.configuration.security.jwt.JwtDecoder;
-import com.rit.starterboot.configuration.security.jwt.JwtEncoder;
 import com.rit.starterboot.configuration.security.properties.CorsProperties;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -28,26 +25,15 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+@AllArgsConstructor
 @Configuration
-@EnableConfigurationProperties({JwtProperties.class, CorsProperties.class})
+@Import(JwtConfiguration.class)
+@EnableConfigurationProperties({CorsProperties.class})
 public class SecurityConfiguration {
 
     private final CorsProperties corsProperties;
     private final ObjectProvider<WithoutAuthenticationRequestMatcherProvider> withoutAuthenticationRequestMatcherProvider;
-    private final JwtKeyStore jwtKeyStore;
-
-    public SecurityConfiguration(CorsProperties corsProperties,
-                                 ObjectProvider<WithoutAuthenticationRequestMatcherProvider> withoutAuthenticationRequestMatcherProvider,
-                                 JwtProperties jwtProperties) {
-        this.corsProperties = corsProperties;
-        this.withoutAuthenticationRequestMatcherProvider = withoutAuthenticationRequestMatcherProvider;
-        this.jwtKeyStore = new JwtKeyStore(jwtProperties);
-    }
-
-    @Bean
-    public JwtEncoder jwtEncoder() {
-        return new Auth0JwtEncoder(Algorithm.RSA256(jwtKeyStore.getPublicKey(), jwtKeyStore.getPrivateKey()));
-    }
+    private final JwtDecoder jwtDecoder;
 
     @Bean
     @SuppressWarnings("PMD.SignatureDeclareThrowsException")
@@ -56,10 +42,10 @@ public class SecurityConfiguration {
                    .csrf(this::csrf)
                    .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                    .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint()))
+                   .logout(AbstractHttpConfigurer::disable)
+                   .addFilterAfter(new BearerTokenAuthenticationFilter(jwtDecoder), X509AuthenticationFilter.class)
                    .authorizeHttpRequests(authorize -> authorize.requestMatchers(withoutAuthenticationRequestMatchers())
                                                                 .permitAll().anyRequest().authenticated())
-                   .addFilterAfter(new BearerTokenAuthenticationFilter(jwtDecoder()), X509AuthenticationFilter.class)
-                   .logout(AbstractHttpConfigurer::disable)
                    .build();
     }
 
@@ -90,9 +76,5 @@ public class SecurityConfiguration {
     private RequestMatcher[] withoutAuthenticationRequestMatchers() {
         return withoutAuthenticationRequestMatcherProvider.getIfAvailable(WithoutAuthenticationRequestMatcherProvider::new)
                                                           .requestMatchers();
-    }
-
-    private JwtDecoder jwtDecoder() {
-        return new Auth0JwtDecoder(Algorithm.RSA256(jwtKeyStore.getPublicKey()));
     }
 }

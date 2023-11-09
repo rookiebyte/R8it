@@ -6,12 +6,13 @@ import com.rit.starterboot.configuration.jwt.properties.JwtProperties
 trait PropertiesFactory {
 
     JwtProperties getJwtProperties() {
+        def encoder = new JwtProperties.EncoderProperties(true, 24)
         new JwtProperties(
                 '../jwt/keystore.jks',
                 'password',
                 'oauthkey',
                 'password',
-                24
+                encoder,
         )
     }
 }

@@ -1,8 +1,6 @@
 package com.rit.user.domain.user;
 
 
-import com.rit.starterboot.domain.user.User;
-
 import java.util.Optional;
 
 public interface UserRepository {
@@ -11,5 +9,7 @@ public interface UserRepository {
 
     Optional<User> findUserByEmail(String email);
 
-    User saveUser(User user, UsersCredentials credentials);
+    User saveUser(User user);
+
+    void updateUsersCredentials(User user, UsersCredentials credentials);
 }

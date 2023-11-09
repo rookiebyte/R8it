@@ -7,7 +7,9 @@ app:
     keystore-password: password
     key-alias: oauthkey
     private-key-passphrase: password
-    valid-period-in-hours: 24
+    encoder:
+      enabled: true
+      valid-period-in-hours: 24
 
 spring:
   application:

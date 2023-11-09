@@ -2,6 +2,7 @@ package com.rit.user.context.auth;
 
 import com.rit.user.context.auth.dto.LoginRequest;
 import com.rit.user.context.auth.dto.LoginResponse;
+import com.rit.user.context.auth.dto.RegisterOtpRequest;
 import com.rit.user.context.auth.dto.RegisterRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
@@ -27,7 +28,12 @@ class AuthEndpoint {
         return authService.login(request);
     }
 
-    @PostMapping(path = "/client/register", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = "/register/otp", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    void userRegisterInitWithOtp(@Valid @RequestBody RegisterOtpRequest request) {
+        authService.userRegisterInitWithOtp(request);
+    }
+
+    @PostMapping(path = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE})
     LoginResponse register(@Valid @RequestBody RegisterRequest request) {
         return authService.register(request);
     }

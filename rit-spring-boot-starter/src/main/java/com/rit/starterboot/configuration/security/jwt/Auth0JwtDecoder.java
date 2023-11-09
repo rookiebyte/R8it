@@ -3,11 +3,11 @@ package com.rit.starterboot.configuration.security.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
-public class Auth0JwtDecoder implements JwtDecoder {
+class Auth0JwtDecoder implements JwtDecoder {
 
     private final Algorithm algorithm;
 
-    public Auth0JwtDecoder(Algorithm algorithm) {
+    Auth0JwtDecoder(Algorithm algorithm) {
         this.algorithm = algorithm;
     }
 
