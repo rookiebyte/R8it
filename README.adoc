@@ -43,7 +43,13 @@ provide email and confirm otp (if user has password set ask for it)
 
 == System requirements
 - sending emails/sms/push notifications 
-- 
+
+== Milestones
+- flow rejestracji użytkownika
+- flow logowania uzyttkownika
+- serach/add/remove friends
+- rate smth
+- przegladanie ostatnich ocen znajomych
 
 = MVP - minimum viable product
 "If you’re not embarrassed by the first version of your product, you’ve launched too late."
