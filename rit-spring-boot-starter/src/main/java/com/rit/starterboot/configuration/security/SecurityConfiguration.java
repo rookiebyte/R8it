@@ -1,46 +1,70 @@
 package com.rit.starterboot.configuration.security;
 
-import com.rit.starterboot.configuration.security.properties.CorsProperties;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.rit.starterboot.configuration.jwt.JwtKeyStore;
 import com.rit.starterboot.configuration.jwt.properties.JwtProperties;
-import lombok.AllArgsConstructor;
+import com.rit.starterboot.configuration.security.jwt.Auth0JwtDecoder;
+import com.rit.starterboot.configuration.security.jwt.Auth0JwtEncoder;
+import com.rit.starterboot.configuration.security.jwt.BearerTokenAuthenticationEntryPoint;
+import com.rit.starterboot.configuration.security.jwt.BearerTokenAuthenticationFilter;
+import com.rit.starterboot.configuration.security.jwt.JwtDecoder;
+import com.rit.starterboot.configuration.security.jwt.JwtEncoder;
+import com.rit.starterboot.configuration.security.properties.CorsProperties;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.preauth.x509.X509AuthenticationFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@AllArgsConstructor
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 @Configuration
 @EnableConfigurationProperties({JwtProperties.class, CorsProperties.class})
 public class SecurityConfiguration {
 
     private final CorsProperties corsProperties;
     private final ObjectProvider<WithoutAuthenticationRequestMatcherProvider> withoutAuthenticationRequestMatcherProvider;
+    private final JwtKeyStore jwtKeyStore;
+
+    public SecurityConfiguration(CorsProperties corsProperties,
+                                 ObjectProvider<WithoutAuthenticationRequestMatcherProvider> withoutAuthenticationRequestMatcherProvider,
+                                 JwtProperties jwtProperties) {
+        this.corsProperties = corsProperties;
+        this.withoutAuthenticationRequestMatcherProvider = withoutAuthenticationRequestMatcherProvider;
+        this.jwtKeyStore = new JwtKeyStore(jwtProperties);
+    }
 
     @Bean
-    public JwtKeyStore jwtKeyStore(JwtProperties jwtProperties) {
-        return new JwtKeyStore(jwtProperties);
+    public JwtEncoder jwtEncoder() {
+        return new Auth0JwtEncoder(Algorithm.RSA256(jwtKeyStore.getPublicKey(), jwtKeyStore.getPrivateKey()));
     }
 
     @Bean
     @SuppressWarnings("PMD.SignatureDeclareThrowsException")
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtKeyStore jwtKeyStore) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.cors(this::cors)
                    .csrf(this::csrf)
-                   .authorizeHttpRequests(authorize -> authorize.requestMatchers(withoutAuthenticationRequestMatchers()).permitAll()
-                                                                .anyRequest().authenticated())
-                   .oauth2ResourceServer((spec) -> oauth2(spec, jwtKeyStore)).build();
+                   .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
+                   .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint()))
+                   .authorizeHttpRequests(authorize -> authorize.requestMatchers(withoutAuthenticationRequestMatchers())
+                                                                .permitAll().anyRequest().authenticated())
+                   .addFilterAfter(new BearerTokenAuthenticationFilter(jwtDecoder()), X509AuthenticationFilter.class)
+                   .logout(AbstractHttpConfigurer::disable)
+                   .build();
+    }
+
+    private AuthenticationEntryPoint authenticationEntryPoint() {
+        return new BearerTokenAuthenticationEntryPoint();
     }
 
     private void cors(CorsConfigurer<HttpSecurity> cors) {
@@ -68,11 +92,7 @@ public class SecurityConfiguration {
                                                           .requestMatchers();
     }
 
-    private void oauth2(OAuth2ResourceServerConfigurer<HttpSecurity> spec, JwtKeyStore jwtKeyStore) {
-        spec.jwt(jwt -> jwt.decoder(jwtDecoder(jwtKeyStore)));
-    }
-
-    private JwtDecoder jwtDecoder(JwtKeyStore jwtKeyStore) {
-        return NimbusJwtDecoder.withPublicKey(jwtKeyStore.getPublicKey()).build();
+    private JwtDecoder jwtDecoder() {
+        return new Auth0JwtDecoder(Algorithm.RSA256(jwtKeyStore.getPublicKey()));
     }
 }

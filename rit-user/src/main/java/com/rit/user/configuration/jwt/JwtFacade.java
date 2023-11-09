@@ -16,12 +16,10 @@ public class JwtFacade {
 
     private final JwtKeyStore jwtKeyStore;
     private final JwtProperties jwtProperties;
-    private final JwtConverter jwtConverter;
 
     public JwtFacade(JwtKeyStore jwtKeyStore, JwtProperties jwtProperties) {
         this.jwtKeyStore = jwtKeyStore;
         this.jwtProperties = jwtProperties;
-        this.jwtConverter = new JwtConverter();
     }
 
     private Algorithm getSignAlgorithm() {
