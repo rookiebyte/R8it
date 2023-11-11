@@ -1,0 +1,31 @@
+server:
+  port: 8085
+  servlet:
+    contextPath: /v1/rit/notification
+
+spring:
+  application:
+    name: @project.artifactId@
+  data:
+    mongodb:
+      database: rit-notification
+
+build:
+  version: @project.version@
+  description: @project.description@
+
+eureka:
+  instance:
+    statusPageUrlPath: ${server.servlet.contextPath}/actuator/info
+    healthCheckUrlPath: ${server.servlet.contextPath}/actuator/health
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info, health
+  security:
+    enabled: false

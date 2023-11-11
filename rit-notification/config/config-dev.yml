@@ -1,0 +1,19 @@
+app:
+  cors:
+    allowedOrigins:
+      - http://localhost:8080
+  jwt:
+    keystore-path: ../jwt/keystore.jks
+    keystore-password: password
+    key-alias: oauthkey
+    private-key-passphrase: password
+
+spring:
+  config:
+    import: optional:secrets.yml
+
+eureka:
+  client:
+    enabled: false
+    serviceUrl:
+      defaultZone: http://localhost:8082/eureka

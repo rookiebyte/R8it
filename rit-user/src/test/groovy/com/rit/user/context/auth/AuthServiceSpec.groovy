@@ -7,7 +7,7 @@ import com.rit.user.domain.user.OtpService
 import com.rit.user.domain.user.UserOtp
 import com.rit.user.factory.PropertiesFactory
 import com.rit.user.factory.UserFactory
-import com.rit.user.infrastructure.user.OtpServiceFactory
+import com.rit.user.infrastructure.user.OtpServiceConfiguration
 import org.junit.platform.commons.util.StringUtils
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import spock.lang.Specification
@@ -20,7 +20,7 @@ class AuthServiceSpec extends Specification implements PropertiesFactory, AuthRe
     def setup() {
         var encoder = new JwtConfiguration(jwtProperties).jwtEncoder()
         def jwtFacade = new JwtFacade(encoder, jwtProperties)
-        otpService = Spy(new OtpServiceFactory().otpService())
+        otpService = Spy(new OtpServiceConfiguration().otpService())
         authService = new AuthServiceConfiguration().authService(jwtFacade, otpService, new BCryptPasswordEncoder())
     }
 
@@ -30,7 +30,7 @@ class AuthServiceSpec extends Specification implements PropertiesFactory, AuthRe
         when: "generate otp"
         authService.userRegisterInitWithOtp(getRegisterOtpRequest(credentials))
         then:
-        1 * otpService.generateOtp(_) >> { args -> otp = callRealMethod(); otp}
+        1 * otpService.generateOtp(_) >> { args -> otp = callRealMethod(); otp }
         otp != null
         when:
         def registerResult = authService.register(getRegisterRequest(credentials, otp))
@@ -50,7 +50,7 @@ class AuthServiceSpec extends Specification implements PropertiesFactory, AuthRe
         when: "generate otp"
         authService.userRegisterInitWithOtp(getRegisterOtpRequest(credentials))
         then:
-        1 * otpService.generateOtp(_) >> { args -> otp = callRealMethod(); otp}
+        1 * otpService.generateOtp(_) >> { args -> otp = callRealMethod(); otp }
         otp != null
         when: "generate otp"
         authService.userRegisterInitWithOtp(getRegisterOtpRequest(credentials))
