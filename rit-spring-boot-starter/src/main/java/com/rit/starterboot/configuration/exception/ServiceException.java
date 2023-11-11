@@ -12,7 +12,7 @@ public class ServiceException extends RestRuntimeException {
         this.uuid = uuid;
     }
 
-    private ServiceException(RestExceptionCode restExceptionCode, Throwable cause) {
+    public ServiceException(RestExceptionCode restExceptionCode, Throwable cause) {
         this(restExceptionCode, UUID.randomUUID().toString(), cause);
     }
 

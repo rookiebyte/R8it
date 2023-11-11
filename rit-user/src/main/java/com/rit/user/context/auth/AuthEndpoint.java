@@ -5,6 +5,7 @@ import com.rit.user.context.auth.dto.LoginResponse;
 import com.rit.user.context.auth.dto.RegisterOtpRequest;
 import com.rit.user.context.auth.dto.RegisterRequest;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,16 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/auth")
 @Validated
 class AuthEndpoint {
 
+    /*todo: check if validated annotation on this class is nesesery*/
     private final AuthService authService;
-
-    AuthEndpoint(AuthService authService) {
-        this.authService = authService;
-    }
 
     @PostMapping(path = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE})
     LoginResponse login(@Valid @RequestBody LoginRequest request) {

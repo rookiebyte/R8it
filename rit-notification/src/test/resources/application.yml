@@ -1,0 +1,31 @@
+app:
+  cors:
+    allowedOrigins:
+      - http://localhost:8080
+  jwt:
+    keystore-path: ../jwt/keystore.jks
+    keystore-password: password
+    key-alias: oauthkey
+    private-key-passphrase: password
+    encoder:
+      enabled: true
+      valid-period-in-hours: 24
+
+spring:
+  application:
+    name: test
+  main:
+    banner-mode: "off"
+    lazy-initialization: true
+
+eureka:
+  client:
+    enabled: false
+
+server:
+  servlet:
+    contextPath: /v1/rit/test
+
+build:
+  version: 1.0.0
+  description: test description

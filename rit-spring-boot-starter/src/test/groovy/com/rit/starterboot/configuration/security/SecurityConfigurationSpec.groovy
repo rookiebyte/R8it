@@ -1,6 +1,5 @@
 package com.rit.starterboot.configuration.security
 
-
 import com.rit.starterboot.configuration.SpringFullContextSpecification
 import com.rit.starterboot.configuration.security.jwt.JwtEncoder
 import org.springframework.beans.factory.annotation.Autowired
@@ -9,8 +8,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpHeaders
 import org.springframework.test.context.ContextConfiguration
 
-import static SecurityTestEndpoint.SIMPLE_GET
 import static SecurityTestEndpoint.AUTH_NEEDED_GET
+import static SecurityTestEndpoint.SIMPLE_GET
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
