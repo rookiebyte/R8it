@@ -28,7 +28,7 @@
         <robusta.version>1.0.0-SNAPSHOT</robusta.version>
         <auth.java.jwt.version>4.4.0</auth.java.jwt.version>
         <springdoc.openapi.ui.version>2.2.0</springdoc.openapi.ui.version>
-        <spring-cloud.version>2022.0.3</spring-cloud.version>
+        <spring-cloud.version>2022.0.4</spring-cloud.version>
         <spring.starter.version>1.0.0-SNAPSHOT</spring.starter.version>
         <lombok.version>1.18.30</lombok.version>
     </properties>

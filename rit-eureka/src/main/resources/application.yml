@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: rit-discovery-service
+
+server:
+  port: 8082
+  ssl:
+    enabled: true
+    client-auth: NEED
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetchRegistry: false
+    tls:
+      enabled: ${server.ssl.enabled}
+      key-store: ${server.ssl.key-store}
+      key-alias: ${server.ssl.key-alias}
+      key-store-password: ${server.ssl.key-store-password}
+      key-password: ${server.ssl.key-password}
+      trust-store: ${server.ssl.trust-store}
+      trust-store-password: ${server.ssl.trust-store-password}
+    healthcheck:
+      enabled: true
+
+management:
+  info:
+    build:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info, health
+  security:
+    enabled: false

@@ -1,0 +1,64 @@
+server:
+  port: 8080
+  ssl:
+    enabled: true
+
+eureka:
+  client:
+    tls:
+      enabled: ${server.ssl.enabled}
+      key-store: ${server.ssl.key-store}
+      key-store-password: ${server.ssl.key-store-password}
+      key-password: ${server.ssl.key-password}
+      trust-store: ${server.ssl.trust-store}
+      trust-store-password: ${server.ssl.trust-store-password}
+  instance:
+    securePortEnabled: true
+    nonSecurePortEnabled: false
+    statusPageUrlPath: /actuator/info
+    healthCheckUrlPath: /actuator/health
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info, health
+  security:
+    enabled: false
+
+spring:
+  application:
+    name: rit-gateway
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+      cache:
+        enabled: false
+    gateway:
+      httpclient:
+        ssl:
+          enabled: ${server.ssl.enabled}
+          key-store: ${server.ssl.key-store}
+          key-store-password: ${server.ssl.key-store-password}
+          key-password: ${server.ssl.key-password}
+      routes:
+        - id: rit-user
+          uri: lb://rit-user
+          predicates:
+            - Path=/v1/rit/users/**
+
+springDoc:
+  apiDocs:
+    enabled: true
+  swaggerUi:
+    disableSwaggerDefaultUrl: true
+    enabled: true
+    path: /
+    urls:
+      - url: /v1/rit/users/v3/api-docs
+        name: rit-user
+        primaryName: RIT user

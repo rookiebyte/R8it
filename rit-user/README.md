@@ -1,6 +1,6 @@
 # rit-user
 
-[local swagger url](http://localhost:8084/v1/rit/users/swagger-ui/index.html)
+[local swagger url](https://localhost:8084/v1/rit/users/swagger-ui/index.html)
 
 local run args configuration:
 

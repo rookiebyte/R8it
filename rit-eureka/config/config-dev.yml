@@ -1,0 +1,14 @@
+server:
+  ssl:
+    keyStore: file:../ssl/keystore/eureka.p12
+    keyStorePassword: password
+    keyPassword: password
+    trustStore: file:../ssl/truststore.p12
+    trustStorePassword: password
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    serviceUrl:
+      defaultZone: https://localhost:8082/eureka

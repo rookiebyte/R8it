@@ -1,7 +1,7 @@
 app:
   cors:
     allowedOrigins:
-      - http://localhost:8080
+      - https://localhost:8080
   jwt:
     keystore-path: ../jwt/keystore.jks
     keystore-password: password
@@ -16,8 +16,17 @@ spring:
   config:
     import: optional:secrets.yml
 
+server:
+  ssl:
+    key-store: file:../ssl/keystore/user.p12
+    key-store-password: password
+    key-password: password
+    trustStore: file:../ssl/truststore.p12
+    trustStorePassword: password
+
 eureka:
+  instance:
+    hostname: localhost
   client:
-    enabled: false
     serviceUrl:
-      defaultZone: http://localhost:8082/eureka
+      defaultZone: https://localhost:8082/eureka

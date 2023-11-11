@@ -1,0 +1,27 @@
+server:
+  ssl:
+    keyStore: file:../ssl/keystore/gateway.p12
+    keyStorePassword: password
+    keyPassword: password
+    trustStore: file:../ssl/ca.p12
+    trustStorePassword: password
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    serviceUrl:
+      defaultZone: https://localhost:8082/eureka
+
+spring:
+  cloud:
+    loadBalancer:
+      ribbon:
+        enabled: false
+      cache:
+        enabled: false
+    gateway:
+      httpclient:
+        ssl:
+          trustedX509Certificates:
+            - file:../ssl/ca.pem
