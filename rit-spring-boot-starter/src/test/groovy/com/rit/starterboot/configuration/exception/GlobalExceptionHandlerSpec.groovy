@@ -2,11 +2,11 @@ package com.rit.starterboot.configuration.exception
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rit.robusta.util.Strings
+import com.rit.starterboot.RitSpringBootApplication
 import com.rit.starterboot.configuration.SpringFullContextSpecification
+import com.rit.starterboot.configuration.security.AuthenticationRequestMatcherProvider
 import org.spockframework.spring.SpringBean
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
-import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
+import org.springframework.context.annotation.Bean
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Shared
@@ -81,7 +81,16 @@ class GlobalExceptionHandlerSpec extends SpringFullContextSpecification {
         Strings.isNotBlank(error.uuid())
     }
 
-    @SpringBootApplication(exclude = [SecurityAutoConfiguration, ErrorMvcAutoConfiguration])
+    @RitSpringBootApplication
     static class SpringTestApp {
+        @Bean
+        AuthenticationRequestMatcherProvider authenticationRequestMatcherProvider() {
+            return new AuthenticationRequestMatcherProvider() {
+                @Override
+                protected List<String> permitAllPaths() {
+                    return List.of("/**")
+                }
+            }
+        }
     }
 }

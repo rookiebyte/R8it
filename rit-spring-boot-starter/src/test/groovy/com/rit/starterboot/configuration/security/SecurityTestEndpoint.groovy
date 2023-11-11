@@ -7,13 +7,18 @@ import org.springframework.web.bind.annotation.RestController
 class SecurityTestEndpoint {
 
     public static final String SIMPLE_GET = "/testGET"
-    public static final String AUTH_NEEDED_GET = "/authNeeded"
+    public static final String JWT_AUTH_NEEDED_GET = "/jwtAuthNeeded"
+    public static final String M_TLS_AUTH_NEEDED_GET = "/mTlsAuthNeeded"
 
     @GetMapping(SIMPLE_GET)
     void simpleGet() {
     }
 
-    @GetMapping(AUTH_NEEDED_GET)
-    void authNeededGet() {
+    @GetMapping(JWT_AUTH_NEEDED_GET)
+    void jwtAuthNeededGet() {
+    }
+
+    @GetMapping(M_TLS_AUTH_NEEDED_GET)
+    void mTlsAuthNeededGet() {
     }
 }

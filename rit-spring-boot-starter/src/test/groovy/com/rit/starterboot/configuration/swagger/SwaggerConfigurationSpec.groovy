@@ -1,13 +1,16 @@
 package com.rit.starterboot.configuration.swagger
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.rit.starterboot.RitSpringBootApplication
 import com.rit.starterboot.configuration.SpringFullContextSpecification
+import com.rit.starterboot.configuration.security.AuthenticationRequestMatcherProvider
 import com.rit.starterboot.configuration.swagger.properties.BuildProperties
 import io.swagger.v3.core.util.Json31
 import io.swagger.v3.oas.models.OpenAPI
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.context.annotation.Bean
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Shared
 
@@ -58,7 +61,16 @@ class SwaggerConfigurationSpec extends SpringFullContextSpecification {
     }
 
 
-    @SpringBootApplication
+    @RitSpringBootApplication
     static class SpringTestApp {
+        @Bean
+        AuthenticationRequestMatcherProvider authenticationRequestMatcherProvider() {
+            return new AuthenticationRequestMatcherProvider() {
+                @Override
+                protected List<String> permitAllPaths() {
+                    return List.of("/**")
+                }
+            }
+        }
     }
 }
