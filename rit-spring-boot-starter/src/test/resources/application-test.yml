@@ -29,3 +29,17 @@ server:
 build:
   version: 1.0.0
   description: test description
+
+http:
+  client:
+    testClient:
+      enabled: true
+      type: URL
+      url: https://certauth.cryptomix.com
+      ssl:
+        keyAlias: browser-client
+        keyPassword: password
+        keyStore: ../ssl/browser-client.p12
+        keyStorePassword: password
+        trustStore: ../ssl/truststore.p12
+        trustStorePassword: password

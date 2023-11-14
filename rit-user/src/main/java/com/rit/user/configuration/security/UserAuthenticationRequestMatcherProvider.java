@@ -9,7 +9,7 @@ import java.util.List;
 public class UserAuthenticationRequestMatcherProvider extends AuthenticationRequestMatcherProvider {
 
     @Override
-    protected List<String> pathMatchers() {
+    protected List<String> permitAllPaths() {
         return List.of("/auth/**");
     }
 }

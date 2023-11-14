@@ -1,5 +1,7 @@
 package com.rit.starterboot.configuration.exception;
 
+import com.rit.robusta.util.Strings;
+
 import java.util.UUID;
 
 public class ServiceException extends RestRuntimeException {
@@ -13,7 +15,7 @@ public class ServiceException extends RestRuntimeException {
     }
 
     public ServiceException(RestExceptionCode restExceptionCode, Throwable cause) {
-        this(restExceptionCode, UUID.randomUUID().toString(), cause);
+        this(restExceptionCode, fromCauseOrNewUUID(cause), cause);
     }
 
     public ServiceException(RestExceptionCode restExceptionCode) {
@@ -31,5 +33,15 @@ public class ServiceException extends RestRuntimeException {
     @Override
     public String getUuid() {
         return uuid;
+    }
+
+    private static String fromCauseOrNewUUID(Throwable cause) {
+        if (cause instanceof GenericFeignClientException genericFeignClientException) {
+            var uuid = genericFeignClientException.getErrorAttributesResponse().uuid();
+            if (Strings.isNotBlank(uuid)) {
+                return uuid;
+            }
+        }
+        return UUID.randomUUID().toString();
     }
 }

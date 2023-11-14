@@ -16,7 +16,7 @@ public final class User {
     private final UserStatus userStatus;
     private final String username;
     private final String phoneNumber;
-    private final Map<String, UserOtp> oneTimePasswords;
+    private final Map<OtpActionType, UserOtp> oneTimePasswords;
 
     @Override
     public boolean equals(Object o) {
@@ -33,6 +33,6 @@ public final class User {
 
     public void addOtp(UserOtp userOtp) {
         /*todo: remove expired ones*/
-        oneTimePasswords.put(userOtp.getActionName(), userOtp);
+        oneTimePasswords.put(userOtp.getActionType(), userOtp);
     }
 }

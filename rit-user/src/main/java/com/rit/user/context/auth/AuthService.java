@@ -1,5 +1,7 @@
 package com.rit.user.context.auth;
 
+import com.rit.starterboot.domain.notification.NotificationService;
+import com.rit.starterboot.domain.notification.RegistrationOtpMailNotification;
 import com.rit.starterboot.domain.user.UserStatus;
 import com.rit.user.configuration.jwt.JwtFacade;
 import com.rit.user.context.auth.dto.LoginRequest;
@@ -9,6 +11,7 @@ import com.rit.user.context.auth.dto.RegisterRequest;
 import com.rit.user.context.auth.exception.IncorrectOtpException;
 import com.rit.user.context.auth.exception.InvalidCredentialsException;
 import com.rit.user.context.auth.exception.UserAlreadyExistsException;
+import com.rit.user.domain.user.OtpActionType;
 import com.rit.user.domain.user.OtpService;
 import com.rit.user.domain.user.User;
 import com.rit.user.domain.user.UserRepository;
@@ -23,13 +26,13 @@ import java.util.HashMap;
 @AllArgsConstructor
 public class AuthService {
 
-    private static final String REGISTRATION_OTP_ACTION_NAME = "REGISTRATION";
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
 
     private final JwtFacade jwtFacade;
     private final UserRepository userRepository;
     private final OtpService otpService;
     private final PasswordEncoder passwordEncoder;
+    private final NotificationService notificationService;
 
     public LoginResponse login(LoginRequest request) {
         var user = userRepository.findUserByEmail(request.email()).orElseThrow(InvalidCredentialsException::new);
@@ -49,8 +52,9 @@ public class AuthService {
                        .userStatus(UserStatus.PENDING)
                        .oneTimePasswords(new HashMap<>())
                        .build();
-        var otp = otpService.generateOtp(REGISTRATION_OTP_ACTION_NAME);
-        LOGGER.info("Add new user Otp {}", new String(otp.getValue()));
+        var otp = otpService.generateOtp(OtpActionType.REGISTRATION);
+        var template = new RegistrationOtpMailNotification(user.getEmail(), new String(otp.getValue()));
+        notificationService.sendNotification(template);
         user.addOtp(otp);
         userRepository.saveUser(user);
     }
@@ -61,7 +65,7 @@ public class AuthService {
             LOGGER.warn("Login attempt for user[{}] with not pending status", user.getId());
             throw new InvalidCredentialsException();
         }
-        if (!otpService.isUserOtpMatches(request.otp(), REGISTRATION_OTP_ACTION_NAME, user)) {
+        if (!otpService.isUserOtpMatches(request.otp(), OtpActionType.REGISTRATION, user)) {
             throw new IncorrectOtpException();
         }
 

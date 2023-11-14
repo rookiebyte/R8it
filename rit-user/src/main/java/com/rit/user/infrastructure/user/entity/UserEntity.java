@@ -3,6 +3,7 @@ package com.rit.user.infrastructure.user.entity;
 import com.google.common.base.Objects;
 import com.rit.robusta.util.Collections;
 import com.rit.starterboot.domain.user.UserStatus;
+import com.rit.user.domain.user.OtpActionType;
 import com.rit.user.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class UserEntity {
     private String username;
     private String phoneNumber;
     private byte[] password;
-    private Map<String, UserOtpEntity> oneTimePasswords;
+    private Map<OtpActionType, UserOtpEntity> oneTimePasswords;
 
     public UserEntity(User user) {
         this.id = user.getId();
