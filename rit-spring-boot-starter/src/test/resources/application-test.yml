@@ -35,7 +35,7 @@ http:
     notification:
       name: rit-notification
       enabled: true
-      connectionType: LOAD_BALANCER_LABEL
+      type: LOAD_BALANCER_LABEL
       ssl:
         keyAlias: browser-client
         keyPassword: password
@@ -45,7 +45,7 @@ http:
         trustStorePassword: password
     testClient:
       enabled: true
-      connectionType: URL
+      type: URL
       url: https://certauth.cryptomix.com
       ssl:
         keyAlias: browser-client

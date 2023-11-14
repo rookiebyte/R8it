@@ -1,8 +1,8 @@
-package com.rit.starterboot.domain.notification.mail;
+package com.rit.starterboot.domain.notification;
 
 import java.util.Map;
 
-public final class RegistrationOtpMailNotification implements MailNotificationTemplate {
+public final class RegistrationOtpMailNotification implements MailNotification {
 
     private static final String TEMPLATE_NAME = "registration/otp";
     private final String recipient;

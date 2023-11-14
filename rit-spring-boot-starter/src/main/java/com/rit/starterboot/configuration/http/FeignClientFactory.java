@@ -20,7 +20,6 @@ import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
 import org.springframework.cloud.openfeign.FeignClientBuilder;
 import org.springframework.cloud.openfeign.loadbalancer.FeignBlockingLoadBalancerClient;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 
 import javax.net.ssl.SSLContext;
 import java.security.KeyManagementException;
@@ -31,7 +30,6 @@ import java.security.UnrecoverableKeyException;
 import java.util.List;
 
 @AllArgsConstructor
-@Component
 class FeignClientFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FeignClientFactory.class);
@@ -54,6 +52,7 @@ class FeignClientFactory {
     }
 
     private void clientCustomizer(Feign.Builder builder, HttpClientProperties properties) {
+        builder.errorDecoder(new FeignClientErrorDecoder());
         builder.client(client(properties));
     }
 

@@ -1,8 +1,8 @@
-package com.rit.starterboot.domain.notification.mail;
+package com.rit.starterboot.domain.notification;
 
 import java.util.Map;
 
-public interface MailNotificationTemplate {
+public sealed interface MailNotification permits RegistrationOtpMailNotification {
 
     String getTemplateName();
 

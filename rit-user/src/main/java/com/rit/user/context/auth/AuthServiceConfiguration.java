@@ -1,6 +1,6 @@
 package com.rit.user.context.auth;
 
-import com.rit.starterboot.infrastructure.notification.NotificationClient;
+import com.rit.starterboot.domain.notification.NotificationService;
 import com.rit.user.configuration.jwt.JwtFacade;
 import com.rit.user.domain.user.OtpService;
 import com.rit.user.domain.user.UserRepository;
@@ -14,13 +14,13 @@ public class AuthServiceConfiguration {
 
     public AuthService authService(JwtFacade jwtFacade, UserRepository userRepository,
                                    OtpService otpService, PasswordEncoder passwordEncoder,
-                                   NotificationClient notificationClient) {
-        return new AuthService(jwtFacade, userRepository, otpService, passwordEncoder, notificationClient);
+                                   NotificationService notificationService) {
+        return new AuthService(jwtFacade, userRepository, otpService, passwordEncoder, notificationService);
     }
 
     @Bean
     public AuthService authService(JwtFacade jwtFacade, OtpService otpService, PasswordEncoder passwordEncoder,
-                                   NotificationClient notificationClient) {
-        return authService(jwtFacade, new InMemoryUserRepository(), otpService, passwordEncoder, notificationClient);
+                                   NotificationService notificationService) {
+        return authService(jwtFacade, new InMemoryUserRepository(), otpService, passwordEncoder, notificationService);
     }
 }

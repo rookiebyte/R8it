@@ -5,8 +5,8 @@ import com.rit.notification.SingleArgumentSpy
 import com.rit.notification.domain.notification.mail.MailSenderService
 import com.rit.notification.domain.notification.mail.MailTemplate
 import com.rit.robusta.util.Strings
-import com.rit.starterboot.domain.notification.mail.MailNotificationTemplate
-import com.rit.starterboot.domain.notification.mail.RegistrationOtpMailNotification
+import com.rit.starterboot.domain.notification.MailNotification
+import com.rit.starterboot.domain.notification.RegistrationOtpMailNotification
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
@@ -57,7 +57,7 @@ class MailNotificationEndpointSpec extends Specification {
         otp = "123456"
     }
 
-    ResultActions sendMail(MailNotificationTemplate template) {
+    ResultActions sendMail(MailNotification template) {
         def request = post("/mail")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(template))

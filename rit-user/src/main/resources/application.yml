@@ -24,7 +24,7 @@ http:
     notification:
       name: rit-notification
       enabled: true
-      connectionType: LOAD_BALANCER_LABEL
+      type: LOAD_BALANCER_LABEL
       ssl:
         keyPassword: ${server.ssl.key-password}
         keyStore: ${server.ssl.key-store}

@@ -18,6 +18,11 @@ public class GlobalExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    @ExceptionHandler(Throwable.class)
+    public ResponseEntity<ErrorAttributesResponse> handleThrowable(Throwable ex) {
+        return handleServiceException(new ServiceException(ex));
+    }
+
     @ExceptionHandler(HttpMediaTypeException.class)
     public ResponseEntity<?> handleHttpMediaTypeException(HttpMediaTypeException ex) {
         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).build();
@@ -33,11 +38,6 @@ public class GlobalExceptionHandler {
         var violationMap = ex.getFieldErrors().stream()
                              .collect(Collectors.toMap(this::getFieldPath, it -> getViolationType(it).name()));
         return handleRestRuntimeException(new ValidationException(violationMap));
-    }
-
-    @ExceptionHandler(Throwable.class)
-    public ResponseEntity<ErrorAttributesResponse> handleThrowable(Throwable ex) {
-        return handleServiceException(new ServiceException(ex));
     }
 
     @ExceptionHandler(ServiceException.class)

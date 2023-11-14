@@ -1,6 +1,8 @@
 package com.rit.user.context.auth
 
 import com.rit.starterboot.configuration.security.jwt.JwtConfiguration
+import com.rit.starterboot.domain.notification.NotificationService
+import com.rit.starterboot.infrastructure.notification.NotificationClient
 import com.rit.user.configuration.jwt.JwtFacade
 import com.rit.user.context.auth.exception.UserAlreadyExistsException
 import com.rit.user.domain.user.OtpService
@@ -16,12 +18,14 @@ class AuthServiceSpec extends Specification implements PropertiesFactory, AuthRe
 
     private AuthService authService
     private OtpService otpService
+    private NotificationService notificationService
 
     def setup() {
-        var encoder = new JwtConfiguration(jwtProperties).jwtEncoder()
+        def encoder = new JwtConfiguration(jwtProperties).jwtEncoder()
         def jwtFacade = new JwtFacade(encoder, jwtProperties)
+        notificationService = Mock()
         otpService = Spy(new OtpServiceConfiguration().otpService())
-        authService = new AuthServiceConfiguration().authService(jwtFacade, otpService, new BCryptPasswordEncoder())
+        authService = new AuthServiceConfiguration().authService(jwtFacade, otpService, new BCryptPasswordEncoder(), notificationService)
     }
 
     def "login with registered user, expect jwt"() {
@@ -32,6 +36,7 @@ class AuthServiceSpec extends Specification implements PropertiesFactory, AuthRe
         then:
         1 * otpService.generateOtp(_) >> { args -> otp = callRealMethod(); otp }
         otp != null
+        1 * notificationService.sendNotification(_)
         when:
         def registerResult = authService.register(getRegisterRequest(credentials, otp))
         then: "jwt is not blank"

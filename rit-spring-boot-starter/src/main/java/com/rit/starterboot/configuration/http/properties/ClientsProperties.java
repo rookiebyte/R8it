@@ -5,7 +5,7 @@ import org.springframework.validation.annotation.Validated;
 
 @ConfigurationProperties(prefix = "http.client")
 @Validated
-public record ClientProperties(
+public record ClientsProperties(
 
         HttpClientProperties notification
 ) {
