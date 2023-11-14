@@ -1,11 +1,11 @@
-package com.rit.starterboot.configuration.http;
+package com.rit.starterboot.configuration.feign;
 
 import com.rit.robusta.util.KeyStores;
 import com.rit.robusta.util.Strings;
 import com.rit.starterboot.configuration.exception.ConfigurationException;
-import com.rit.starterboot.configuration.http.properties.ConnectionType;
-import com.rit.starterboot.configuration.http.properties.HttpClientProperties;
-import com.rit.starterboot.configuration.http.properties.HttpSSLClientProperties;
+import com.rit.starterboot.configuration.feign.properties.ConnectionType;
+import com.rit.starterboot.configuration.feign.properties.HttpClientProperties;
+import com.rit.starterboot.configuration.feign.properties.HttpSSLClientProperties;
 import feign.Client;
 import feign.Feign;
 import feign.httpclient.ApacheHttpClient;
@@ -30,7 +30,7 @@ import java.security.UnrecoverableKeyException;
 import java.util.List;
 
 @AllArgsConstructor
-class FeignClientFactory {
+public class FeignClientFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FeignClientFactory.class);
 
@@ -38,7 +38,7 @@ class FeignClientFactory {
     private final LoadBalancerClient loadBalancerClient;
     private final LoadBalancerClientFactory loadBalancerClientFactory;
 
-    <T> T create(Class<T> clientClass, HttpClientProperties properties) {
+    public <T> T create(Class<T> clientClass, HttpClientProperties properties) {
         var builder = new FeignClientBuilder(applicationContext).forType(clientClass, nameFor(clientClass, properties.name()))
                                                                 .customize(it -> clientCustomizer(it, properties));
         if (Strings.isNotBlank(properties.url())) {

@@ -1,8 +1,8 @@
-package com.rit.starterboot.configuration.http
+package com.rit.starterboot.configuration.feign
 
 import com.rit.starterboot.RitSpringBootApplication
 import com.rit.starterboot.configuration.SpringFullContextSpecification
-import com.rit.starterboot.configuration.http.properties.HttpClientProperties
+import com.rit.starterboot.configuration.feign.properties.HttpClientProperties
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties

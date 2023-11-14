@@ -1,4 +1,4 @@
-package com.rit.starterboot.configuration.http.properties;
+package com.rit.starterboot.configuration.feign.properties;
 
 import org.springframework.validation.annotation.Validated;
 
@@ -8,7 +8,6 @@ public record HttpClientProperties(
         String url,
         ConnectionType type,
         String name,
-        boolean enabled,
         HttpSSLClientProperties ssl
 ) {
 }

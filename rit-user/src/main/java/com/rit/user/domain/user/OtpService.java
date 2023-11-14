@@ -2,7 +2,7 @@ package com.rit.user.domain.user;
 
 public interface OtpService {
 
-    UserOtp generateOtp(String actionName);
+    UserOtp generateOtp(OtpActionType actionType);
 
-    boolean isUserOtpMatches(String otp, String actionName, User user);
+    boolean isUserOtpMatches(String otp, OtpActionType actionType, User user);
 }

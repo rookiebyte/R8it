@@ -10,13 +10,9 @@ import java.util.Arrays;
 @Getter
 public class UserOtp {
 
-    private final String actionName;
+    private final OtpActionType actionType;
     private final LocalDateTime expiresAt;
     private final byte[] value;
-
-    public String getActionName() {
-        return actionName;
-    }
 
     public boolean isExpired() {
         return LocalDateTime.now().isAfter(expiresAt);

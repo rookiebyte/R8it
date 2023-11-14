@@ -1,4 +1,4 @@
-package com.rit.starterboot.configuration.http.properties;
+package com.rit.starterboot.configuration.feign.properties;
 
 public enum ConnectionType {
 

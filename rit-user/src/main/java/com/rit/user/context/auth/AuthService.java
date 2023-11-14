@@ -11,6 +11,7 @@ import com.rit.user.context.auth.dto.RegisterRequest;
 import com.rit.user.context.auth.exception.IncorrectOtpException;
 import com.rit.user.context.auth.exception.InvalidCredentialsException;
 import com.rit.user.context.auth.exception.UserAlreadyExistsException;
+import com.rit.user.domain.user.OtpActionType;
 import com.rit.user.domain.user.OtpService;
 import com.rit.user.domain.user.User;
 import com.rit.user.domain.user.UserRepository;
@@ -25,7 +26,6 @@ import java.util.HashMap;
 @AllArgsConstructor
 public class AuthService {
 
-    private static final String REGISTRATION_OTP_ACTION_NAME = "REGISTRATION";
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
 
     private final JwtFacade jwtFacade;
@@ -52,11 +52,9 @@ public class AuthService {
                        .userStatus(UserStatus.PENDING)
                        .oneTimePasswords(new HashMap<>())
                        .build();
-        var otp = otpService.generateOtp(REGISTRATION_OTP_ACTION_NAME);
-        var template = new RegistrationOtpMailNotification(null, "123");
-//        var template = new RegistrationOtpMailNotification(user.getEmail(), new String(otp.getValue()));
+        var otp = otpService.generateOtp(OtpActionType.REGISTRATION);
+        var template = new RegistrationOtpMailNotification(user.getEmail(), new String(otp.getValue()));
         notificationService.sendNotification(template);
-        LOGGER.info("Add new user Otp {}", new String(otp.getValue()));
         user.addOtp(otp);
         userRepository.saveUser(user);
     }
@@ -67,7 +65,7 @@ public class AuthService {
             LOGGER.warn("Login attempt for user[{}] with not pending status", user.getId());
             throw new InvalidCredentialsException();
         }
-        if (!otpService.isUserOtpMatches(request.otp(), REGISTRATION_OTP_ACTION_NAME, user)) {
+        if (!otpService.isUserOtpMatches(request.otp(), OtpActionType.REGISTRATION, user)) {
             throw new IncorrectOtpException();
         }
 

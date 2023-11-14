@@ -1,4 +1,4 @@
-package com.rit.starterboot.configuration.http;
+package com.rit.starterboot.configuration.feign;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rit.starterboot.configuration.exception.ErrorAttributesResponse;

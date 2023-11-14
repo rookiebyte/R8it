@@ -1,12 +1,18 @@
-package com.rit.starterboot.configuration.http.properties;
+package com.rit.starterboot.configuration.feign.properties;
+
+import jakarta.validation.constraints.NotEmpty;
 
 public record HttpSSLClientProperties(
 
-        String keyAlias,
+        @NotEmpty
         String keyPassword,
+        @NotEmpty
         String keyStore,
+        @NotEmpty
         String keyStorePassword,
+        @NotEmpty
         String trustStore,
+        @NotEmpty
         String trustStorePassword
 ) {
 
