@@ -7,6 +7,9 @@ public record RegisterOtpRequest(
 
         @Email
         @NotEmpty
-        String email
+        String email,
+
+        @NotEmpty
+        String otp
 ) {
 }

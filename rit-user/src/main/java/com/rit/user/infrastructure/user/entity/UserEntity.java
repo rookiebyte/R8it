@@ -20,13 +20,13 @@ public class UserEntity {
     private String email;
     private UserStatus userStatus;
     private String username;
-    private String phoneNumber;
     private byte[] password;
     private Map<OtpActionType, UserOtpEntity> oneTimePasswords;
 
     public UserEntity(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
+        this.username = user.getUsername();
         this.userStatus = user.getUserStatus();
         this.oneTimePasswords = Collections.utilityWrapper(user.getOneTimePasswords()).convertValues(UserOtpEntity::new);
     }
@@ -37,7 +37,6 @@ public class UserEntity {
                    .email(email)
                    .userStatus(userStatus)
                    .username(username)
-                   .phoneNumber(phoneNumber)
                    .oneTimePasswords(Collections.utilityWrapper(oneTimePasswords).convertValues(UserOtpEntity::toDomain))
                    .build();
     }

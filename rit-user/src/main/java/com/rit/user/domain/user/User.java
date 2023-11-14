@@ -13,9 +13,8 @@ public final class User {
 
     private final String id;
     private final String email;
-    private final UserStatus userStatus;
     private final String username;
-    private final String phoneNumber;
+    private final UserStatus userStatus;
     private final Map<OtpActionType, UserOtp> oneTimePasswords;
 
     @Override

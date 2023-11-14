@@ -6,9 +6,11 @@ import com.rit.user.domain.user.User;
 import com.rit.user.domain.user.UserRepository;
 import com.rit.user.domain.user.UsersCredentials;
 import com.rit.user.infrastructure.user.entity.UserEntity;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public class InMemoryUserRepository extends InMemoryRepository<String, UserEntity> implements UserRepository {
 
     public InMemoryUserRepository() {
@@ -41,14 +43,10 @@ public class InMemoryUserRepository extends InMemoryRepository<String, UserEntit
     }
 
     @Override
-    public void updateUsersCredentials(User user, UsersCredentials credentials) {
-        var optionalEntity = findById(user.getId());
-        if (optionalEntity.isEmpty()) {
-            return;
-        }
-        var entity = optionalEntity.get();
+    public User saveUser(User user, UsersCredentials credentials) {
+        var entity = new UserEntity(user);
         entity.setPassword(credentials.password());
-        save(entity);
+        return save(entity).toDomain();
     }
 
     private UsersCredentials buildUserCredentials(UserEntity userEntity) {

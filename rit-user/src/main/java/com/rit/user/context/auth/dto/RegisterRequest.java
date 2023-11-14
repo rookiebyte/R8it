@@ -10,9 +10,9 @@ public record RegisterRequest(
         String email,
 
         @NotEmpty
-        String password,
+        String username,
 
         @NotEmpty
-        String otp
+        String password
 ) {
 }

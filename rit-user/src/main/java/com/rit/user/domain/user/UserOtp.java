@@ -21,4 +21,8 @@ public class UserOtp {
     public boolean matches(byte[] value) {
         return Arrays.equals(this.value, value);
     }
+
+    public String copyValueAsString() {
+        return new String(value);
+    }
 }

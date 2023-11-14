@@ -9,7 +9,7 @@ public interface UserRepository {
 
     Optional<User> findUserByEmail(String email);
 
-    User saveUser(User user);
+    User saveUser(User user, UsersCredentials credentials);
 
-    void updateUsersCredentials(User user, UsersCredentials credentials);
+    User saveUser(User user);
 }

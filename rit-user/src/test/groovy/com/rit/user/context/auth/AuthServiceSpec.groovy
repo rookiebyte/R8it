@@ -1,67 +1,82 @@
 package com.rit.user.context.auth
 
+import com.rit.robusta.util.Strings
 import com.rit.starterboot.configuration.security.jwt.JwtConfiguration
 import com.rit.starterboot.domain.notification.NotificationService
-import com.rit.starterboot.infrastructure.notification.NotificationClient
+import com.rit.starterboot.domain.user.UserStatus
 import com.rit.user.configuration.jwt.JwtFacade
-import com.rit.user.context.auth.exception.UserAlreadyExistsException
+import com.rit.user.context.auth.exception.InvalidCredentialsException
 import com.rit.user.domain.user.OtpService
 import com.rit.user.domain.user.UserOtp
+import com.rit.user.domain.user.UserRepository
 import com.rit.user.factory.PropertiesFactory
 import com.rit.user.factory.UserFactory
+import com.rit.user.infrastructure.user.InMemoryUserRepository
 import com.rit.user.infrastructure.user.OtpServiceConfiguration
-import org.junit.platform.commons.util.StringUtils
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import spock.lang.Specification
 
 class AuthServiceSpec extends Specification implements PropertiesFactory, AuthRequestFactory, UserFactory {
 
-    private AuthService authService
+    private PasswordEncoder passwordEncoder
+    private UserRepository userRepository
     private OtpService otpService
     private NotificationService notificationService
+    private AuthService authService
 
     def setup() {
         def encoder = new JwtConfiguration(jwtProperties).jwtEncoder()
         def jwtFacade = new JwtFacade(encoder, jwtProperties)
-        notificationService = Mock()
+        passwordEncoder = new BCryptPasswordEncoder()
+        userRepository = new InMemoryUserRepository()
         otpService = Spy(new OtpServiceConfiguration().otpService())
-        authService = new AuthServiceConfiguration().authService(jwtFacade, otpService, new BCryptPasswordEncoder(), notificationService)
+        notificationService = Mock()
+        authService = new AuthServiceConfiguration().authService(jwtFacade, userRepository, otpService, passwordEncoder, notificationService)
     }
 
-    def "login with registered user, expect jwt"() {
-        setup:
-        UserOtp otp
-        when: "generate otp"
-        authService.userRegisterInitWithOtp(getRegisterOtpRequest(credentials))
+    def "login, with existing user, expect jwt"() {
+        given:
+        userRepository.saveUser(user(), credentials(passwordEncoder))
+        when:
+        var response = authService.login(getLoginRequest(credentials()))
         then:
-        1 * otpService.generateOtp(_) >> { args -> otp = callRealMethod(); otp }
-        otp != null
+        Strings.isNotBlank(response?.jwt())
+    }
+
+    def "login, with incorrect password, expect InvalidCredentialsException"() {
+        given:
+        userRepository.saveUser(user(), credentials(passwordEncoder))
+        when:
+        authService.login(getLoginRequest(credentials("incorrect")))
+        then:
+        thrown InvalidCredentialsException
+    }
+
+    def "register init, expect user created"() {
+        when:
+        authService.registerInit(getRegisterRequest(user, credentials()))
+        then:
         1 * notificationService.sendNotification(_)
-        when:
-        def registerResult = authService.register(getRegisterRequest(credentials, otp))
-        then: "jwt is not blank"
-        StringUtils.isNotBlank(registerResult.jwt())
-        when:
-        def loginResult = authService.login(getLoginRequest(credentials))
-        then: "jwt is not blank"
-        StringUtils.isNotBlank(loginResult.jwt())
+        var createdUser = userRepository.findUserByEmail(user.email).get()
+        createdUser?.email == user.email
+        createdUser?.username == user.username
+        createdUser?.userStatus == UserStatus.PENDING
+        !createdUser?.oneTimePasswords?.isEmpty()
         where:
-        credentials = credentials()
+        user = user()
     }
 
-    def "register with already existing client, expect UserAlreadyExistsException"() {
-        setup:
-        UserOtp otp
-        when: "generate otp"
-        authService.userRegisterInitWithOtp(getRegisterOtpRequest(credentials))
+    def "confirm registration with otp, expect jwt"() {
+        given:
+        UserOtp otp = null
+        when:
+        authService.registerInit(getRegisterRequest(user(), credentials()))
         then:
         1 * otpService.generateOtp(_) >> { args -> otp = callRealMethod(); otp }
-        otp != null
-        when: "generate otp"
-        authService.userRegisterInitWithOtp(getRegisterOtpRequest(credentials))
+        when:
+        var results = authService.userRegisterConfirmOtp(getRegisterOtpRequest(credentials(), otp?.copyValueAsString()))
         then:
-        thrown UserAlreadyExistsException
-        where:
-        credentials = credentials()
+        Strings.isNotBlank(results?.jwt())
     }
 }

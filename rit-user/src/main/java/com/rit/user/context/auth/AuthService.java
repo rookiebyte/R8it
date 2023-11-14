@@ -14,6 +14,7 @@ import com.rit.user.context.auth.exception.UserAlreadyExistsException;
 import com.rit.user.domain.user.OtpActionType;
 import com.rit.user.domain.user.OtpService;
 import com.rit.user.domain.user.User;
+import com.rit.user.domain.user.UserOtp;
 import com.rit.user.domain.user.UserRepository;
 import com.rit.user.domain.user.UsersCredentials;
 import lombok.AllArgsConstructor;
@@ -37,29 +38,30 @@ public class AuthService {
     public LoginResponse login(LoginRequest request) {
         var user = userRepository.findUserByEmail(request.email()).orElseThrow(InvalidCredentialsException::new);
         var credentials = userRepository.fetchUsersCredentialsByEmail(request.email()).orElseThrow(InvalidCredentialsException::new);
-        if (passwordEncoder.matches(request.password(), new String(credentials.password()))) {
+        if (passwordEncoder.matches(request.password(), credentials.passwordAsString())) {
             return new LoginResponse(jwtFacade.createJwt(user));
         }
         throw new InvalidCredentialsException();
     }
 
-    public void userRegisterInitWithOtp(RegisterOtpRequest request) {
+    public void registerInit(RegisterRequest request) {
         if (userRepository.findUserByEmail(request.email()).isPresent()) {
             throw new UserAlreadyExistsException(request.email());
         }
         var user = User.builder()
                        .email(request.email())
+                       .username(request.username())
                        .userStatus(UserStatus.PENDING)
                        .oneTimePasswords(new HashMap<>())
                        .build();
+        var credentials = new UsersCredentials(request.email(), passwordEncoder.encode(request.password()));
         var otp = otpService.generateOtp(OtpActionType.REGISTRATION);
-        var template = new RegistrationOtpMailNotification(user.getEmail(), new String(otp.getValue()));
-        notificationService.sendNotification(template);
+        sendRegistrationOtpMailNotification(user, otp);
         user.addOtp(otp);
-        userRepository.saveUser(user);
+        userRepository.saveUser(user, credentials);
     }
 
-    public LoginResponse register(RegisterRequest request) {
+    public LoginResponse userRegisterConfirmOtp(RegisterOtpRequest request) {
         var user = userRepository.findUserByEmail(request.email()).orElseThrow(InvalidCredentialsException::new);
         if (user.getUserStatus() != UserStatus.PENDING) {
             LOGGER.warn("Login attempt for user[{}] with not pending status", user.getId());
@@ -68,9 +70,11 @@ public class AuthService {
         if (!otpService.isUserOtpMatches(request.otp(), OtpActionType.REGISTRATION, user)) {
             throw new IncorrectOtpException();
         }
-
-        var credentials = new UsersCredentials(request.email(), passwordEncoder.encode(request.password()).getBytes());
-        userRepository.updateUsersCredentials(user, credentials);
         return new LoginResponse(jwtFacade.createJwt(user));
+    }
+
+    private void sendRegistrationOtpMailNotification(User user, UserOtp otp) {
+        var template = new RegistrationOtpMailNotification(user.getEmail(), otp.copyValueAsString());
+        notificationService.sendNotification(template);
     }
 }

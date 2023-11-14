@@ -4,11 +4,9 @@ import com.rit.user.domain.user.OtpActionType;
 import com.rit.user.domain.user.OtpService;
 import com.rit.user.domain.user.User;
 import com.rit.user.domain.user.UserOtp;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-@Service
 class OtpFacadeService implements OtpService {
 
     @Override
