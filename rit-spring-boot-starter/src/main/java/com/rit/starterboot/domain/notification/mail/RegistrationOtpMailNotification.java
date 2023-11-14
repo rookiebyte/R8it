@@ -2,7 +2,7 @@ package com.rit.starterboot.domain.notification.mail;
 
 import java.util.Map;
 
-public class RegistrationOtpMailNotification implements MailNotificationTemplate {
+public final class RegistrationOtpMailNotification implements MailNotificationTemplate {
 
     private static final String TEMPLATE_NAME = "registration/otp";
     private final String recipient;

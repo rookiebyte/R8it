@@ -29,3 +29,28 @@ server:
 build:
   version: 1.0.0
   description: test description
+
+http:
+  client:
+    notification:
+      name: rit-notification
+      enabled: true
+      connectionType: LOAD_BALANCER_LABEL
+      ssl:
+        keyAlias: browser-client
+        keyPassword: password
+        keyStore: ../ssl/browser-client.p12
+        keyStorePassword: password
+        trustStore: ../ssl/truststore.p12
+        trustStorePassword: password
+    testClient:
+      enabled: true
+      connectionType: URL
+      url: https://certauth.cryptomix.com
+      ssl:
+        keyAlias: browser-client
+        keyPassword: password
+        keyStore: ../ssl/browser-client.p12
+        keyStorePassword: password
+        trustStore: ../ssl/truststore.p12
+        trustStorePassword: password

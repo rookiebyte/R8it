@@ -1,6 +1,8 @@
 package com.rit.user.context.auth;
 
+import com.rit.starterboot.domain.notification.mail.RegistrationOtpMailNotification;
 import com.rit.starterboot.domain.user.UserStatus;
+import com.rit.starterboot.infrastructure.notification.NotificationClient;
 import com.rit.user.configuration.jwt.JwtFacade;
 import com.rit.user.context.auth.dto.LoginRequest;
 import com.rit.user.context.auth.dto.LoginResponse;
@@ -30,6 +32,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final OtpService otpService;
     private final PasswordEncoder passwordEncoder;
+    private final NotificationClient notificationClient;
 
     public LoginResponse login(LoginRequest request) {
         var user = userRepository.findUserByEmail(request.email()).orElseThrow(InvalidCredentialsException::new);
@@ -50,6 +53,7 @@ public class AuthService {
                        .oneTimePasswords(new HashMap<>())
                        .build();
         var otp = otpService.generateOtp(REGISTRATION_OTP_ACTION_NAME);
+        notificationClient.sendNotification(new RegistrationOtpMailNotification(user.getEmail(), new String(otp.getValue())));
         LOGGER.info("Add new user Otp {}", new String(otp.getValue()));
         user.addOtp(otp);
         userRepository.saveUser(user);

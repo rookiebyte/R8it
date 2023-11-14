@@ -19,6 +19,19 @@ app:
       enabled: true
       valid-period-in-hours: 24
 
+http:
+  client:
+    notification:
+      name: rit-notification
+      enabled: true
+      connectionType: LOAD_BALANCER_LABEL
+      ssl:
+        keyPassword: ${server.ssl.key-password}
+        keyStore: ${server.ssl.key-store}
+        keyStorePassword: ${server.ssl.key-store-password}
+        trustStore: ${server.ssl.trust-store}
+        trustStorePassword: ${server.ssl.trust-store-password}
+
 build:
   version: @project.version@
   description: @project.description@

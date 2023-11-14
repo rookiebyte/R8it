@@ -5,6 +5,7 @@ import com.rit.notification.SingleArgumentSpy
 import com.rit.notification.domain.notification.mail.MailSenderService
 import com.rit.notification.domain.notification.mail.MailTemplate
 import com.rit.robusta.util.Strings
+import com.rit.starterboot.domain.notification.mail.MailNotificationTemplate
 import com.rit.starterboot.domain.notification.mail.RegistrationOtpMailNotification
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.ResultActions
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -36,16 +38,12 @@ class MailNotificationEndpointSpec extends Specification {
         objectMapper = new ObjectMapper()
     }
 
-    def "yrdy"() {
+    def "send mail, with registration otp template, expect status is ok"() {
         setup:
         def argumentSpy = new SingleArgumentSpy<MailTemplate>(MailTemplate)
         mailSenderService.send(_) >> { args -> argumentSpy.spy(args) }
         when:
-        def requestBody = new RegistrationOtpMailNotification(recipient, otp)
-        def request = post("/mail")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(requestBody))
-        def result = mockMvc.perform(request)
+        def result = sendMail(new RegistrationOtpMailNotification(recipient, otp))
         then:
         result.andExpect(status().isOk())
         def template = argumentSpy.value
@@ -57,5 +55,12 @@ class MailNotificationEndpointSpec extends Specification {
         where:
         recipient = "test@example.com"
         otp = "123456"
+    }
+
+    ResultActions sendMail(MailNotificationTemplate template) {
+        def request = post("/mail")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(template))
+        return mockMvc.perform(request)
     }
 }

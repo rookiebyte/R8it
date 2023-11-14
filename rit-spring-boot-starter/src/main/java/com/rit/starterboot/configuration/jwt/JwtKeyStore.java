@@ -1,12 +1,10 @@
 package com.rit.starterboot.configuration.jwt;
 
-import com.rit.robusta.util.Files;
+import com.rit.robusta.util.KeyStores;
 import com.rit.starterboot.configuration.jwt.properties.JwtProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.security.Key;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -14,7 +12,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
@@ -40,11 +37,9 @@ public class JwtKeyStore {
     }
 
     private static KeyStore readKeyStore(JwtProperties jwtProperties) {
-        try (InputStream resourceAsStream = Files.getAsStream(jwtProperties.keyStorePath())) {
-            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            keyStore.load(resourceAsStream, jwtProperties.keyStorePasswordAsArray());
-            return keyStore;
-        } catch (IOException | CertificateException | NoSuchAlgorithmException | KeyStoreException ex) {
+        try {
+            return KeyStores.readKeyStore(jwtProperties.keyStorePath(), jwtProperties.keyStorePasswordAsArray());
+        } catch (KeyStoreException ex) {
             LOGGER.error("Unable to load keystore: {}", jwtProperties.keyStorePath(), ex);
         }
         throw new IllegalArgumentException("Unable to load keystore");
