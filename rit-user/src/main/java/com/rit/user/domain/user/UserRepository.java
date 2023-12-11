@@ -11,5 +11,7 @@ public interface UserRepository {
 
     User saveUser(User user, UsersCredentials credentials);
 
-    User saveUser(User user);
+    Optional<User> updateUser(User user);
+
+    Optional<User> findUserById(String id);
 }

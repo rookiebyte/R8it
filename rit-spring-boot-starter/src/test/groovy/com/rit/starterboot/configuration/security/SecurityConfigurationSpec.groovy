@@ -57,7 +57,7 @@ class SecurityConfigurationSpec extends SpringFullContextSpecification {
         result.andExpect(status().isUnauthorized())
     }
 
-    def 'get jwt auth needed endpoint, with barer token, expect status is ok'() {
+    def 'get jwt auth needed endpoint, with bearer token, expect status is ok'() {
         setup:
         def token = jwtEncoder.encode(new DummyJwtTemplate())
         when:
@@ -76,7 +76,7 @@ class SecurityConfigurationSpec extends SpringFullContextSpecification {
         result.andExpect(status().isUnauthorized())
     }
 
-    def 'get mtls auth needed endpoint, with barer token, expect status is unauthorized'() {
+    def 'get mtls auth needed endpoint, with bearer token, expect status is unauthorized'() {
         setup:
         def token = jwtEncoder.encode(new DummyJwtTemplate())
         when:

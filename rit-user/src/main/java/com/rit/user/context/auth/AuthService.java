@@ -1,5 +1,6 @@
 package com.rit.user.context.auth;
 
+import com.rit.starterboot.configuration.exception.ServiceException;
 import com.rit.starterboot.domain.notification.NotificationService;
 import com.rit.starterboot.domain.notification.RegistrationOtpMailNotification;
 import com.rit.starterboot.domain.user.UserStatus;
@@ -69,6 +70,12 @@ public class AuthService {
         }
         if (!otpService.isUserOtpMatches(request.otp(), OtpActionType.REGISTRATION, user)) {
             throw new IncorrectOtpException();
+        }
+        user.setUserStatus(UserStatus.ACTIVE);
+        var result = userRepository.updateUser(user);
+        if (result.isEmpty()) {
+            LOGGER.error("Could not update existing user");
+            throw new ServiceException();
         }
         return new LoginResponse(jwtFacade.createJwt(user));
     }

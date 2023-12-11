@@ -14,7 +14,7 @@ public final class User {
     private final String id;
     private final String email;
     private final String username;
-    private final UserStatus userStatus;
+    private UserStatus userStatus;
     private final Map<OtpActionType, UserOtp> oneTimePasswords;
 
     @Override
@@ -33,5 +33,9 @@ public final class User {
     public void addOtp(UserOtp userOtp) {
         /*todo: remove expired ones*/
         oneTimePasswords.put(userOtp.getActionType(), userOtp);
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 }

@@ -38,8 +38,13 @@ public class InMemoryUserRepository extends InMemoryRepository<String, UserEntit
     }
 
     @Override
-    public User saveUser(User user) {
-        return save(new UserEntity(user)).toDomain();
+    public Optional<User> updateUser(User user) {
+        return fetchUsersCredentialsByEmail(user.getEmail()).map(uc -> saveUser(user, uc));
+    }
+
+    @Override
+    public Optional<User> findUserById(String id) {
+        return findById(id).map(UserEntity::toDomain);
     }
 
     @Override
