@@ -1,0 +1,5 @@
+com.rit.starterboot.servlet.configuration.security.SecurityConfiguration
+com.rit.starterboot.servlet.configuration.security.context.ContextConfiguration
+com.rit.starterboot.servlet.configuration.swagger.SwaggerConfiguration
+com.rit.starterboot.servlet.configuration.exception.GlobalExceptionHandler
+com.rit.starterboot.servlet.configuration.feign.FeignClientConfiguration

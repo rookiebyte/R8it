@@ -1,9 +1,7 @@
 package com.rit.user.context.auth;
 
-import com.rit.starterboot.configuration.exception.ServiceException;
-import com.rit.starterboot.domain.notification.NotificationService;
-import com.rit.starterboot.domain.notification.RegistrationOtpMailNotification;
-import com.rit.starterboot.domain.user.UserStatus;
+import com.rit.starterboot.servlet.configuration.exception.ServiceException;
+import com.rit.starterboot.servlet.domain.user.UserStatus;
 import com.rit.user.configuration.jwt.JwtFacade;
 import com.rit.user.context.auth.dto.LoginRequest;
 import com.rit.user.context.auth.dto.LoginResponse;
@@ -12,6 +10,9 @@ import com.rit.user.context.auth.dto.RegisterRequest;
 import com.rit.user.context.auth.exception.IncorrectOtpException;
 import com.rit.user.context.auth.exception.InvalidCredentialsException;
 import com.rit.user.context.auth.exception.UserAlreadyExistsException;
+import com.rit.user.domain.notification.EmailNotification;
+import com.rit.user.domain.notification.NotificationRepository;
+import com.rit.user.domain.notification.OtpEmailNotificationBindings;
 import com.rit.user.domain.user.OtpActionType;
 import com.rit.user.domain.user.OtpService;
 import com.rit.user.domain.user.User;
@@ -34,7 +35,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final OtpService otpService;
     private final PasswordEncoder passwordEncoder;
-    private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
 
     public LoginResponse login(LoginRequest request) {
         var user = userRepository.findUserByEmail(request.email()).orElseThrow(InvalidCredentialsException::new);
@@ -81,7 +82,11 @@ public class AuthService {
     }
 
     private void sendRegistrationOtpMailNotification(User user, UserOtp otp) {
-        var template = new RegistrationOtpMailNotification(user.getEmail(), otp.copyValueAsString());
-        notificationService.sendNotification(template);
+        var notification = EmailNotification.builder()
+                                            .templateName("registration/otp")
+                                            .recipient(user.getEmail())
+                                            .bindings(new OtpEmailNotificationBindings(otp.copyValueAsString()))
+                                            .build();
+        notificationRepository.sendNotification(notification);
     }
 }

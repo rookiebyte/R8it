@@ -1,6 +1,6 @@
 package com.rit.user.context.info;
 
-import com.rit.starterboot.domain.user.UserContext;
+import com.rit.starterboot.servlet.domain.user.UserContext;
 import com.rit.user.context.info.dto.UserDto;
 import com.rit.user.domain.user.UserRepository;
 import com.rit.user.exception.UserNotFoundException;

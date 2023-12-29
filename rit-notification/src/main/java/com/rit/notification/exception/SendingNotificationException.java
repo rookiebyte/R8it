@@ -1,10 +1,12 @@
 package com.rit.notification.exception;
 
-import com.rit.starterboot.configuration.exception.ServiceException;
+public class SendingNotificationException extends RuntimeException {
 
-public class SendingNotificationException extends ServiceException {
+    public SendingNotificationException(String message) {
+        super(message);
+    }
 
     public SendingNotificationException(Throwable cause) {
-        super(NotificationExceptionRepository.SENDING_NOTIFICATION_EXCEPTION, cause);
+        super("Could not send notification", cause);
     }
 }

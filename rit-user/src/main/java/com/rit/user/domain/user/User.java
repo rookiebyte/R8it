@@ -1,7 +1,7 @@
 package com.rit.user.domain.user;
 
 import com.google.common.base.Objects;
-import com.rit.starterboot.domain.user.UserStatus;
+import com.rit.starterboot.servlet.domain.user.UserStatus;
 import lombok.Builder;
 import lombok.Getter;
 

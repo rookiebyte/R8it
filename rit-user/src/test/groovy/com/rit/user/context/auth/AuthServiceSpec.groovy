@@ -1,11 +1,11 @@
 package com.rit.user.context.auth
 
 import com.rit.robusta.util.Strings
-import com.rit.starterboot.configuration.security.jwt.JwtConfiguration
-import com.rit.starterboot.domain.notification.NotificationService
-import com.rit.starterboot.domain.user.UserStatus
+import com.rit.starterboot.servlet.configuration.security.jwt.JwtConfiguration
+import com.rit.starterboot.servlet.domain.user.UserStatus
 import com.rit.user.configuration.jwt.JwtFacade
 import com.rit.user.context.auth.exception.InvalidCredentialsException
+import com.rit.user.domain.notification.NotificationRepository
 import com.rit.user.domain.user.OtpService
 import com.rit.user.domain.user.UserOtp
 import com.rit.user.domain.user.UserRepository
@@ -22,7 +22,7 @@ class AuthServiceSpec extends Specification implements PropertiesFactory, AuthRe
     private PasswordEncoder passwordEncoder
     private UserRepository userRepository
     private OtpService otpService
-    private NotificationService notificationService
+    private NotificationRepository notificationRepository
     private AuthService authService
 
     def setup() {
@@ -31,8 +31,8 @@ class AuthServiceSpec extends Specification implements PropertiesFactory, AuthRe
         passwordEncoder = new BCryptPasswordEncoder()
         userRepository = new InMemoryUserRepository()
         otpService = Spy(new OtpServiceConfiguration().otpService())
-        notificationService = Mock()
-        authService = new AuthServiceConfiguration().authService(jwtFacade, userRepository, otpService, passwordEncoder, notificationService)
+        notificationRepository = Mock()
+        authService = new AuthServiceConfiguration().authService(jwtFacade, userRepository, otpService, passwordEncoder, notificationRepository)
     }
 
     def "login, with existing user, expect jwt"() {
@@ -57,7 +57,7 @@ class AuthServiceSpec extends Specification implements PropertiesFactory, AuthRe
         when:
         authService.registerInit(getRegisterRequest(user, credentials()))
         then:
-        1 * notificationService.sendNotification(_)
+        1 * notificationRepository.sendNotification(_)
         var createdUser = userRepository.findUserByEmail(user.email).get()
         createdUser?.email == user.email
         createdUser?.username == user.username

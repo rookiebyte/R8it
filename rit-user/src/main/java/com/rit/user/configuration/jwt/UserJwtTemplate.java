@@ -1,7 +1,7 @@
 package com.rit.user.configuration.jwt;
 
-import com.rit.starterboot.configuration.jwt.properties.JwtProperties;
-import com.rit.starterboot.configuration.security.jwt.template.JwtTemplate;
+import com.rit.starterboot.servlet.configuration.jwt.properties.JwtProperties;
+import com.rit.starterboot.servlet.configuration.security.jwt.template.JwtTemplate;
 import com.rit.user.domain.user.User;
 
 import java.time.Instant;

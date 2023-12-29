@@ -1,6 +1,6 @@
 package com.rit.user.exception;
 
-import com.rit.starterboot.configuration.exception.RestExceptionCode;
+import com.rit.starterboot.servlet.configuration.exception.RestExceptionCode;
 
 public final class UserExceptionRepository {
 

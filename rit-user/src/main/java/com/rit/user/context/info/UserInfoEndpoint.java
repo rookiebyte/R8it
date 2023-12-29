@@ -1,6 +1,6 @@
 package com.rit.user.context.info;
 
-import com.rit.starterboot.configuration.security.context.UserContextProvider;
+import com.rit.starterboot.servlet.configuration.security.context.UserContextProvider;
 import com.rit.user.context.info.dto.UserDto;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

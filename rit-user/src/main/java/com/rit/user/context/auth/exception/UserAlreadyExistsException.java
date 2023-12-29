@@ -1,7 +1,7 @@
 package com.rit.user.context.auth.exception;
 
 
-import com.rit.starterboot.configuration.exception.ValidationException;
+import com.rit.starterboot.servlet.configuration.exception.ValidationException;
 import com.rit.user.exception.UserExceptionRepository;
 
 public class UserAlreadyExistsException extends ValidationException {

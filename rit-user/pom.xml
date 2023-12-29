@@ -18,8 +18,13 @@
     <dependencies>
         <dependency>
             <groupId>com.rit</groupId>
-            <artifactId>rit-spring-boot-starter</artifactId>
+            <artifactId>rit-spring-boot-servlet-starter</artifactId>
             <version>${spring.starter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>3.1.1</version>
         </dependency>
     </dependencies>
 

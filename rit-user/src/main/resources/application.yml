@@ -7,6 +7,14 @@ server:
     client-auth: NEED
 
 spring:
+  kafka:
+    producer:
+      properties:
+        spring:
+          json:
+            add:
+              type:
+                headers: false
   application:
     name: @project.artifactId@
   data:
@@ -18,19 +26,6 @@ app:
     encoder:
       enabled: true
       valid-period-in-hours: 24
-
-http:
-  client:
-    notification:
-      name: rit-notification
-      enabled: true
-      type: LOAD_BALANCER_LABEL
-      ssl:
-        keyPassword: ${server.ssl.key-password}
-        keyStore: ${server.ssl.key-store}
-        keyStorePassword: ${server.ssl.key-store-password}
-        trustStore: ${server.ssl.trust-store}
-        trustStorePassword: ${server.ssl.trust-store-password}
 
 build:
   version: @project.version@

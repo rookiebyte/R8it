@@ -1,6 +1,6 @@
 package com.rit.user.configuration.security;
 
-import com.rit.starterboot.configuration.security.AuthenticationRequestMatcherProvider;
+import com.rit.starterboot.servlet.configuration.security.AuthenticationRequestMatcherProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

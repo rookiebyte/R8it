@@ -1,6 +1,6 @@
 package com.rit.user.factory
 
-import com.rit.starterboot.domain.user.UserStatus
+import com.rit.starterboot.servlet.domain.user.UserStatus
 import com.rit.user.domain.user.User
 import com.rit.user.domain.user.UsersCredentials
 import org.springframework.security.crypto.password.PasswordEncoder

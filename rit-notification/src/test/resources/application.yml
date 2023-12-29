@@ -12,6 +12,10 @@ app:
       valid-period-in-hours: 24
 
 spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: test
   application:
     name: test
   main:

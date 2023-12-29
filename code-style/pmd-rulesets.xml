@@ -95,7 +95,6 @@
 
     <!-- Design -->
     <rule ref="category/java/design.xml/AbstractClassWithoutAnyMethod"/>
-    <rule ref="category/java/design.xml/AvoidCatchingGenericException"/>
     <rule ref="category/java/design.xml/AvoidDeeplyNestedIfStmts"/>
     <rule ref="category/java/design.xml/AvoidRethrowingException"/>
     <rule ref="category/java/design.xml/AvoidThrowingNullPointerException"/>

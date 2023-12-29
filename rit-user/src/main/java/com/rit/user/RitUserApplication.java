@@ -1,6 +1,6 @@
 package com.rit.user;
 
-import com.rit.starterboot.RitSpringBootApplication;
+import com.rit.starterboot.servlet.RitSpringBootApplication;
 import org.springframework.boot.SpringApplication;
 
 @RitSpringBootApplication

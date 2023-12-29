@@ -2,7 +2,7 @@ package com.rit.user.infrastructure.user.entity;
 
 import com.google.common.base.Objects;
 import com.rit.robusta.util.Collections;
-import com.rit.starterboot.domain.user.UserStatus;
+import com.rit.starterboot.servlet.domain.user.UserStatus;
 import com.rit.user.domain.user.OtpActionType;
 import com.rit.user.domain.user.User;
 import lombok.Getter;

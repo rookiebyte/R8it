@@ -1,29 +1,3 @@
-app:
-  cors:
-    allowedOrigins:
-      - https://localhost:8080
-  jwt:
-    keystore-path: ../jwt/keystore.jks
-    keystore-password: password
-    key-alias: oauthkey
-    private-key-passphrase: password
-
 spring:
   config:
     import: optional:secrets.yml
-
-server:
-  ssl:
-    key-store: file:../ssl/keystore/notification.p12
-    key-store-password: password
-    key-password: password
-    trustStore: file:../ssl/truststore.p12
-    trustStorePassword: password
-
-eureka:
-  instance:
-    hostname: localhost
-  client:
-    enabled: true
-    serviceUrl:
-      defaultZone: https://localhost:8082/eureka

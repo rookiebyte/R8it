@@ -1,44 +1,15 @@
-server:
-  port: 8085
-  servlet:
-    contextPath: /v1/rit/notification
-  ssl:
-    enabled: true
-    client-auth: NEED
-
 spring:
+  kafka:
+    properties:
+      default:
+        deserialization:
+          exception:
+            handler: org.apache.kafka.streams.errors.LogAndContinueExceptionHandler
+    consumer:
+      group-id: @project.artifactId@
   application:
     name: @project.artifactId@
-  data:
-    mongodb:
-      database: rit-notification
 
 build:
   version: @project.version@
   description: @project.description@
-
-eureka:
-  client:
-    tls:
-      enabled: ${server.ssl.enabled}
-      key-store: ${server.ssl.key-store}
-      key-store-password: ${server.ssl.key-store-password}
-      key-password: ${server.ssl.key-password}
-      trust-store: ${server.ssl.trust-store}
-      trust-store-password: ${server.ssl.trust-store-password}
-  instance:
-    securePortEnabled: true
-    nonSecurePortEnabled: false
-    statusPageUrlPath: ${server.servlet.contextPath}/actuator/info
-    healthCheckUrlPath: ${server.servlet.contextPath}/actuator/health
-
-management:
-  info:
-    env:
-      enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: info, health
-  security:
-    enabled: false
