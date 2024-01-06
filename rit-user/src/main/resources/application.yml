@@ -39,6 +39,9 @@ app:
     encoder:
       enabled: true
       valid-period-in-hours: 24
+  otp:
+    defaultLength: 6
+    defaultExpDelay: 1
 
 build:
   version: @project.version@

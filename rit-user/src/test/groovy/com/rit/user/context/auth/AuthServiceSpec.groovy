@@ -4,6 +4,7 @@ import com.rit.robusta.util.Strings
 import com.rit.starterboot.servlet.configuration.security.jwt.JwtConfiguration
 import com.rit.starterboot.servlet.domain.user.UserStatus
 import com.rit.user.configuration.jwt.JwtFacade
+import com.rit.user.configuration.otp.properties.OtpProperties
 import com.rit.user.context.auth.exception.InvalidCredentialsException
 import com.rit.user.domain.notification.NotificationRepository
 import com.rit.user.domain.user.OtpService
@@ -12,7 +13,7 @@ import com.rit.user.domain.user.UserRepository
 import com.rit.user.factory.PropertiesFactory
 import com.rit.user.factory.UserFactory
 import com.rit.user.infrastructure.user.InMemoryUserRepository
-import com.rit.user.infrastructure.user.OtpServiceConfiguration
+import com.rit.user.infrastructure.user.otp.OtpServiceConfiguration
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import spock.lang.Specification
@@ -30,7 +31,7 @@ class AuthServiceSpec extends Specification implements PropertiesFactory, AuthRe
         def jwtFacade = new JwtFacade(encoder, jwtProperties)
         passwordEncoder = new BCryptPasswordEncoder()
         userRepository = new InMemoryUserRepository()
-        otpService = Spy(new OtpServiceConfiguration().otpService())
+        otpService = Spy(new OtpServiceConfiguration().otpService(otpProperties))
         notificationRepository = Mock()
         authService = new AuthServiceConfiguration().authService(jwtFacade, userRepository, otpService, passwordEncoder, notificationRepository)
     }
@@ -77,6 +78,7 @@ class AuthServiceSpec extends Specification implements PropertiesFactory, AuthRe
         when:
         var results = authService.userRegisterConfirmOtp(getRegisterOtpRequest(credentials(), otp?.copyValueAsString()))
         then:
+        Strings.isNotBlank(otp?.copyValueAsString())
         Strings.isNotBlank(results?.jwt())
     }
 }
