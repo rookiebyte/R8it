@@ -20,7 +20,7 @@ public class UserJwtTemplate extends JwtTemplate {
 
     @Override
     public String getSubject() {
-        return user.getId();
+        return user.getId().toString();
     }
 
     @Override

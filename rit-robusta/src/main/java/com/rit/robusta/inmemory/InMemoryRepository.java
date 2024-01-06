@@ -55,6 +55,10 @@ public abstract class InMemoryRepository<Key, Entity> {
             return keyClass.cast(UUID.randomUUID().toString());
         }
 
+        if (keyClass.equals(UUID.class)) {
+            return keyClass.cast(UUID.randomUUID());
+        }
+
         throw new UnsupportedOperationException("Cannot generate random key with class " + keyClass.getSimpleName());
     }
 

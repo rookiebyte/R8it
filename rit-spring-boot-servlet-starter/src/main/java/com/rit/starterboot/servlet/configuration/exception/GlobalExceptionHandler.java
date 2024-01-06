@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -42,7 +43,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<ErrorAttributesResponse> handleServiceException(ServiceException ex) {
-        LOGGER.error("Unexpected error occurred with uuid[{}]. Cause:", ex.getUuid(), ex.getCause());
+        Throwable cause = Optional.ofNullable(ex.getCause()).orElse(ex);
+        LOGGER.error("Unexpected error occurred with uuid[{}]. Cause: {}", ex.getUuid(), cause.toString());
         var response = new ErrorAttributesResponse(ex);
         return ResponseEntity.status(response.expectedHttpCode()).body(response);
     }

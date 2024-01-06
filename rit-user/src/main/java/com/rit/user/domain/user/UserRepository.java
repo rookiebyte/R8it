@@ -1,7 +1,10 @@
 package com.rit.user.domain.user;
 
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 public interface UserRepository {
 
@@ -11,7 +14,11 @@ public interface UserRepository {
 
     User saveUser(User user, UsersCredentials credentials);
 
-    Optional<User> updateUser(User user);
+    default Optional<User> updateUser(User user) {
+        return fetchUsersCredentialsByEmail(user.getEmail()).map(uc -> saveUser(user, uc));
+    }
 
-    Optional<User> findUserById(String id);
+    Optional<User> findUserById(UUID id);
+
+    List<User> findUserByIds(Set<UUID> friendsId);
 }

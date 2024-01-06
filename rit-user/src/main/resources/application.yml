@@ -7,6 +7,22 @@ server:
     client-auth: NEED
 
 spring:
+#  sql:
+#    init:
+#      continue-on-error: 'true'
+#      mode: always
+#      schema-locations: classpath:/data.sql
+  datasource:
+    username: rit
+    url: jdbc:postgresql://localhost:5432/rit
+    password: password
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        format_sql: 'true'
+    hibernate:
+      ddl-auto: create-drop
   kafka:
     producer:
       properties:
@@ -17,9 +33,6 @@ spring:
                 headers: false
   application:
     name: @project.artifactId@
-  data:
-    mongodb:
-      database: rit-user
 
 app:
   jwt:

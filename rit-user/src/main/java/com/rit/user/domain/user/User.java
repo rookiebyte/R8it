@@ -6,16 +6,25 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Getter
-@Builder
 public final class User {
 
-    private final String id;
+    private final UUID id;
     private final String email;
     private final String username;
     private UserStatus userStatus;
     private final Map<OtpActionType, UserOtp> oneTimePasswords;
+
+    @Builder
+    private User(UUID id, String email, String username, UserStatus userStatus, Map<OtpActionType, UserOtp> oneTimePasswords) {
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.userStatus = userStatus;
+        this.oneTimePasswords = oneTimePasswords;
+    }
 
     @Override
     public boolean equals(Object o) {

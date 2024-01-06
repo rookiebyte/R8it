@@ -28,6 +28,6 @@ eureka:
   instance:
     hostname: localhost
   client:
-    enabled: true
+    enabled: false
     serviceUrl:
       defaultZone: https://localhost:8082/eureka

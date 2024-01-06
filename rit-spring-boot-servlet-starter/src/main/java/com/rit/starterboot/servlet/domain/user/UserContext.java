@@ -1,4 +1,6 @@
 package com.rit.starterboot.servlet.domain.user;
 
-public record UserContext(String rawJWT, String id) {
+import java.util.UUID;
+
+public record UserContext(String rawJWT, UUID id) {
 }

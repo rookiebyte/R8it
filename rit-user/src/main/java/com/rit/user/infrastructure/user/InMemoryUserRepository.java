@@ -6,24 +6,25 @@ import com.rit.user.domain.user.User;
 import com.rit.user.domain.user.UserRepository;
 import com.rit.user.domain.user.UsersCredentials;
 import com.rit.user.infrastructure.user.entity.UserEntity;
-import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
-@Repository
-public class InMemoryUserRepository extends InMemoryRepository<String, UserEntity> implements UserRepository {
+public class InMemoryUserRepository extends InMemoryRepository<UUID, UserEntity> implements UserRepository {
 
     public InMemoryUserRepository() {
-        super(String.class, UserEntity.class);
+        super(UUID.class, UserEntity.class);
     }
 
     @Override
-    protected String provideKey(UserEntity user) {
+    protected UUID provideKey(UserEntity user) {
         return user.getId();
     }
 
     @Override
-    protected void overrideKey(UserEntity user, String key) {
+    protected void overrideKey(UserEntity user, UUID key) {
         user.setId(key);
     }
 
@@ -38,13 +39,13 @@ public class InMemoryUserRepository extends InMemoryRepository<String, UserEntit
     }
 
     @Override
-    public Optional<User> updateUser(User user) {
-        return fetchUsersCredentialsByEmail(user.getEmail()).map(uc -> saveUser(user, uc));
+    public Optional<User> findUserById(UUID id) {
+        return findById(id).map(UserEntity::toDomain);
     }
 
     @Override
-    public Optional<User> findUserById(String id) {
-        return findById(id).map(UserEntity::toDomain);
+    public List<User> findUserByIds(Set<UUID> friendsId) {
+        return findAllBy(e -> friendsId.contains(e.getId())).stream().map(UserEntity::toDomain).toList();
     }
 
     @Override

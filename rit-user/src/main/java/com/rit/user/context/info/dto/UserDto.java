@@ -16,6 +16,6 @@ public record UserDto(
 ) {
 
     public UserDto(User user) {
-        this(user.getId(), user.getEmail(), user.getUsername());
+        this(user.getId().toString(), user.getEmail(), user.getUsername());
     }
 }

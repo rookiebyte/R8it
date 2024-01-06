@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 class OtpFacadeService implements OtpService {
 
+    /*todo: ML implement generator*/
     @Override
     public UserOtp generateOtp(OtpActionType actionType) {
         return UserOtp.builder()

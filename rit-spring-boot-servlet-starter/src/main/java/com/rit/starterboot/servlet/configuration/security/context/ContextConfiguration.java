@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.annotation.RequestScope;
 
+import java.util.UUID;
+
 @Configuration
 public class ContextConfiguration {
 
@@ -15,7 +17,7 @@ public class ContextConfiguration {
     public UserContextProvider userContextProvider() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
         var jwt = (Jwt) auth.getPrincipal();
-        var context = new UserContext(jwt.getTokenValue(), jwt.getSubject());
+        var context = new UserContext(jwt.getTokenValue(), UUID.fromString(jwt.getSubject()));
         return new UserContextProvider(context);
     }
 }

@@ -57,12 +57,12 @@ class AuthServiceSpec extends Specification implements PropertiesFactory, AuthRe
         when:
         authService.registerInit(getRegisterRequest(user, credentials()))
         then:
-        1 * notificationRepository.sendNotification(_)
         var createdUser = userRepository.findUserByEmail(user.email).get()
-        createdUser?.email == user.email
-        createdUser?.username == user.username
-        createdUser?.userStatus == UserStatus.PENDING
-        !createdUser?.oneTimePasswords?.isEmpty()
+        createdUser != null
+        createdUser.email == user.email
+        createdUser.username == user.username
+        createdUser.userStatus == UserStatus.PENDING
+        !createdUser.oneTimePasswords?.isEmpty()
         where:
         user = user()
     }

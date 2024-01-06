@@ -1,5 +1,6 @@
 package com.rit.user.factory
 
+import com.rit.starterboot.servlet.domain.user.UserContext
 import com.rit.starterboot.servlet.domain.user.UserStatus
 import com.rit.user.domain.user.User
 import com.rit.user.domain.user.UsersCredentials
@@ -9,6 +10,10 @@ trait UserFactory {
 
     private final static EMAIL = 'test@example.com'
     private final static PASSWORD = 'password'
+
+    UserContext userContext(User user) {
+        return new UserContext("test_jwt", user.id)
+    }
 
     UsersCredentials credentials() {
         return new UsersCredentials(EMAIL, PASSWORD)
@@ -32,5 +37,9 @@ trait UserFactory {
                    .username("username")
                    .userStatus(UserStatus.ACTIVE)
                    .oneTimePasswords(new HashMap<>())
+    }
+
+    String getRandomUserId() {
+        return UUID.randomUUID().toString()
     }
 }
