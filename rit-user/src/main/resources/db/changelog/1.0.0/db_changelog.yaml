@@ -1,0 +1,69 @@
+databaseChangeLog:
+- changeSet:
+    id: 1704575440705-1
+    author: Pilot (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            name: action_type
+            type: SMALLINT
+        - column:
+            name: expires_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: user_otp_actions_pkey
+            name: id
+            type: UUID
+        - column:
+            name: user_id
+            type: UUID
+        - column:
+            name: value
+            type: BYTEA
+        tableName: user_otp_actions
+- changeSet:
+    id: 1704575440705-2
+    author: Pilot (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            name: user_status
+            type: SMALLINT
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: users_pkey
+            name: id
+            type: UUID
+        - column:
+            name: email
+            type: VARCHAR(255)
+        - column:
+            name: username
+            type: VARCHAR(255)
+        - column:
+            name: password
+            type: BYTEA
+        tableName: users
+- changeSet:
+    id: 1704575440705-3
+    author: Pilot (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: user_otp_actions
+        constraintName: fk25gnjrtp0kohj42fmdjruc5wq
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: users
+        validate: true
+
