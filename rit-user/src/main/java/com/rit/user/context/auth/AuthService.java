@@ -47,20 +47,24 @@ public class AuthService {
     }
 
     public void registerInit(RegisterRequest request) {
-        if (userRepository.findUserByEmail(request.email()).isPresent()) {
+        var user = userRepository.findUserByEmail(request.email()).orElseGet(() -> buildUser(request));
+        if (user.getUserStatus() != UserStatus.PENDING) {
             throw new UserAlreadyExistsException(request.email());
         }
-        var user = User.builder()
-                       .email(request.email())
-                       .username(request.username())
-                       .userStatus(UserStatus.PENDING)
-                       .oneTimePasswords(new HashMap<>())
-                       .build();
         var credentials = new UsersCredentials(request.email(), passwordEncoder.encode(request.password()));
         var otp = otpService.generateOtp(OtpActionType.REGISTRATION);
         sendRegistrationOtpMailNotification(user, otp);
         user.addOtp(otp);
         userRepository.saveUser(user, credentials);
+    }
+
+    private User buildUser(RegisterRequest request) {
+        return User.builder()
+                   .email(request.email())
+                   .username(request.username())
+                   .userStatus(UserStatus.PENDING)
+                   .oneTimePasswords(new HashMap<>())
+                   .build();
     }
 
     public LoginResponse userRegisterConfirmOtp(RegisterOtpRequest request) {
