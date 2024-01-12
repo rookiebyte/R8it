@@ -68,7 +68,7 @@ class AuthServiceSpec extends Specification implements PropertiesFactory, AuthRe
         user = user()
     }
 
-    def "confirm registration with otp, expect jwt"() {
+    def "login, with enrolled user, expect jwt"() {
         given:
         UserOtp otp = null
         when:

@@ -23,6 +23,10 @@ trait UserFactory {
         return new UsersCredentials(EMAIL, passwordEncoder.encode(PASSWORD))
     }
 
+    UsersCredentials credentials(User user) {
+        return new UsersCredentials(user.email, PASSWORD)
+    }
+
     UsersCredentials credentials(String password) {
         return new UsersCredentials(EMAIL, password)
     }

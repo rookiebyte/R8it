@@ -8,6 +8,7 @@ import com.rit.user.domain.user.User;
 import com.rit.user.domain.user.UserOtp;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -39,7 +40,7 @@ public class UserEntity {
 
     private byte[] password;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
     private Set<UserOtpEntity> oneTimePasswords;
 
